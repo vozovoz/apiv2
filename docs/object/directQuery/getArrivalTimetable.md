@@ -1,4 +1,4 @@
-# <a name="up"/>Vozovoz API ver.2.0
+# <a name="up"/>Vozovoz API 2.0
 
 [Главная страница](/README.md) > [Объекты](../index.md) > [Прямой запрос](../directQuery.md) > Расписание дат получения груза
 
