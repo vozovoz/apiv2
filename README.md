@@ -28,3 +28,7 @@ Vozovoz API представляет интерфейс для взаимоде�
     * [Пункт доступа](docs/structure/gateway.md)
         * [Точка доступа](docs/structure/gateway.md#point)
         * [Услуги](docs/structure/service.md)
+
+***
+
+По всем вопросам обращайтесь на e-mail [api@vozovoz.ru](mailto:api@vozovoz.ru).
