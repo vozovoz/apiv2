@@ -28,13 +28,18 @@ $context = stream_context_create([
   ]
 ]);
 
-echo file_get_contents('https://vozovoz.ru/api/?token=yourToken'/* не забудьте указать Ваш токен */, false, $context);
+/* запрос на тестовый сервер */
+echo file_get_contents('https://qa.vozovoz.ru/api/?token=yourToken'/* не забудьте указать Ваш токен */, false, $context);
+/* запрос на рабочий сервер */
+// echo file_get_contents('https://vozovoz.ru/api/?token=yourToken'/* не забудьте указать Ваш токен */, false, $context);
 ```
 
 JavaScript:
 ```javascript
 var xhttp = new XMLHttpRequest();
-xhttp.open("POST", "//vozovoz.ru/api/?token=yourToken"/*вместо yourToken должен быть указан Ваш идентификационный токен-ключ*/, false);
+// запрос на тестовый сервер
+xhttp.open("POST", "//qa.vozovoz.ru/api/?token=yourToken"/*вместо yourToken должен быть указан Ваш идентификационный токен-ключ*/, false);
+// xhttp.open("POST", "//vozovoz.ru/api/?token=yourToken", false); // для рабочего сервера
 xhttp.setRequestHeader("Content-type", "application/json");
 xhttp.send(JSON.stringify({
 // Тело запроса, например:
