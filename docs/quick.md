@@ -12,8 +12,8 @@
 ```javascript
 var xhttp = new XMLHttpRequest();
 // запрос на тестовый сервер
-xhttp.open("POST", "//qa.vozovoz.ru/api/?token=yourToken"/*вместо yourToken должен быть указан Ваш идентификационный токен-ключ*/, false);
-// xhttp.open("POST", "//vozovoz.ru/api/?token=yourToken", false); // для рабочего сервера
+xhttp.open("POST", "https://qa.vozovoz.ru/api/?token=yourToken"/*вместо yourToken должен быть указан Ваш идентификационный токен-ключ*/, false);
+// xhttp.open("POST", "https://vozovoz.ru/api/?token=yourToken", false); // для рабочего сервера
 xhttp.setRequestHeader("Content-type", "application/json");
 xhttp.send(JSON.stringify({
 // Тело запроса, например:
