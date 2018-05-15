@@ -306,6 +306,7 @@ xhttp.send(JSON.stringify(
 | [`dates`](../structure/dates.md) | object | Объект, содержащий даты изменения этапов заказа. См. [структуру "Даты изменения этапов заказа"](../structure/dates.md) |
 | `cargo`.[`dimension`](../structure/cargo.md#dimension) | object | Объект габаритов груза. См. [структуру "Габариты"](../structure/cargo.md#dimension) |
 | `cargo`.`insurance` | integer | Заявленная стоимость страхования груза |
+| `cargo`.`insuranceNdv` | boolean | Страхование без объявленной стоимости |
 | `gateway`     | object    | Объект структуры ["Пункт доступа"](../structure/gateway.md), за исключением `service`, услуги возвращаются в корневом узле `service` (см. ниже) |
 | `id`          | string    | Уникальный внутренний ID заказа |
 | `number`      | integer   | Уникальный внутренний номер заказа |
@@ -493,6 +494,7 @@ xhttp.send(JSON.stringify(
         "weight": 5.3 // общий вес груза (всех мест)
       },
       "insurance": 1000, // заявленная стоимость для страховки (если требуется)
+      "insuranceNdv": false, // если нужно отключить страхование БОС для плательщика физ.лица (также отключается автоматически при использовании "insurance")
       "wrapping": { // упаковка
         "bag1": 1, // 1 шт. упаковки с кодом `bag1`
         "box1": 2, // 2 шт. упаковки с кодом `box1`
