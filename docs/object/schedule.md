@@ -88,7 +88,7 @@ xhttp.send(JSON.stringify(
 
 <a name="get-response-example-addr-addr"/>Пример ответа "адрес-адрес":
 
-```json
+```javascript
 {
   "response": {
     "2019-11-28": { // дата отправки
@@ -143,7 +143,7 @@ xhttp.send(JSON.stringify(
 
 <a name="get-response-example-term-term"/>Пример ответа "терминал-терминал":
 
-```json
+```javascript
 {
   "response": {
     "2019-11-28": { // дата отправки
