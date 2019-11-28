@@ -17,6 +17,7 @@ Vozovoz API представляет интерфейс для взаимоде�
         * [Получить](docs/object/order.md#get)
         * [Оформить](docs/object/order.md#set)
     * [Прямой запрос](docs/object/directQuery.md)
+    * [Расписание дат доставки](docs/object/schedule.md)
     * [Стоимость](docs/object/price.md)
     * [Терминал](docs/object/terminal.md)
     * [Упаковка](docs/object/wrapping.md)
