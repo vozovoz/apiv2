@@ -8,12 +8,12 @@
 ## Содержание
 
 * [Описание](#description)
-* [Получение данных по одному или нескольким терминалам](#get)
+* [Получение данных. Действие `get`](#get)
     * [Общий пример структуры](#get-example)
     * [Подробное описание структуры](#get-struct)
     * [Данные ответа](#get-response)
-        * [Пример ответа](#get-response-example)
-        * [Описание структуры ответа](#get-response-description)
+        * [Пример ответа "адрес-адрес"](#get-response-example-addr-addr)
+        * [Пример ответа "терминал-терминал"](#get-response-example-term-term)
 
 
 ## <a name="description"/>Описание
