@@ -304,6 +304,7 @@ xhttp.send(JSON.stringify(
 | `basePrice`   | integer   | Базовая стоимость в рублях (без учёта скидок) |
 | `customId`    | string    | Пользовательский номер заказа, если был указан при оформлении |
 | [`dates`](../structure/dates.md) | object | Объект, содержащий даты изменения этапов заказа. См. [структуру "Даты изменения этапов заказа"](../structure/dates.md) |
+| `documentList` | array    | Список доступных документов. Ключом является код документа, значением &mdash; прямая ссылка на документ (эти ссылки можно передавать третьим лицам для использования, Ваш API-токен там не требуется) |
 | `cargo`.[`dimension`](../structure/cargo.md#dimension) | object | Объект габаритов груза. См. [структуру "Габариты"](../structure/cargo.md#dimension) |
 | `cargo`.`insurance` | integer | Заявленная стоимость страхования груза |
 | `cargo`.`insuranceNdv` | boolean | Страхование без объявленной стоимости |
@@ -335,7 +336,7 @@ xhttp.send(JSON.stringify(
 
 **Ответ**
 
-```javascript
+```metadata json
 {
   "response": {
     "data": [
@@ -349,6 +350,16 @@ xhttp.send(JSON.stringify(
           "shipped": "",
           "arrived": "",
           "given": ""
+        },
+        "documentList": {
+          "cargoPhoto": "https://vozovoz.ru/api/document/?orderId=40a18ac7-46d0-11e7-80f9-00155d189b14&docType=cargoPhoto",
+          "cmr": "https://vozovoz.ru/api/document/?orderId=40a18ac7-46d0-11e7-80f9-00155d189b14&docType=cmr",
+          "doc": "https://vozovoz.ru/api/document/?orderId=40a18ac7-46d0-11e7-80f9-00155d189b14&docType=doc",
+          "invoice": "https://vozovoz.ru/api/document/?orderId=40a18ac7-46d0-11e7-80f9-00155d189b14&docType=invoice",
+          "markingList": "https://vozovoz.ru/api/document/?orderId=40a18ac7-46d0-11e7-80f9-00155d189b14&docType=markingList",
+          "scn": "https://vozovoz.ru/api/document/?orderId=40a18ac7-46d0-11e7-80f9-00155d189b14&docType=scn",
+          "ssd": "https://vozovoz.ru/api/document/?orderId=40a18ac7-46d0-11e7-80f9-00155d189b14&docType=ssd",
+          "utf": "https://vozovoz.ru/api/document/?orderId=40a18ac7-46d0-11e7-80f9-00155d189b14&docType=utd" 
         },
         "basePrice": 2440,
         "price": 2440,
@@ -390,6 +401,7 @@ xhttp.send(JSON.stringify(
             "volume": 0.1,
             "weight": 0.9
           },
+          "insurance": 590880.23,
           "wrapping": {
             "hardBoxVolume": 0.1,
             "box1": 2
@@ -443,6 +455,14 @@ xhttp.send(JSON.stringify(
               "email": ""
             }
           }
+        },
+        "payer": {
+          "type": "individual",
+          "name": "Name 2",
+          "phone": [
+            "79998887766"
+          ],
+          "email": ""
         }
       }
     ],
