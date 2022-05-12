@@ -18,19 +18,19 @@
 Чтобы получить данные по каком-либо объекту, используя указанные структуры, просмотрите примеры нужного Вам объекта.
 Перейти к [списку объектов](../object/index.md).
 
-| Название                          | Тип       | Входит в структуру    | Краткое описание |
-| --------                          | ---       | ------------------    | ---------------- |
-| [`cargo`](cargo.md)               | object    | _корневой элемент_    | Структура "Груз" |
-| [`customer`](customer.md)         | object    | [`gateway`](gateway.md) | Субструктура структуры "Пункт доступа" |
-| [`destination`](gateway.md#destination) | object    | [`gateway`](gateway.md) | Субструктура структуры "Пункт доступа" |
-| [`dimension`](cargo.md#dimension) | object    | [`cargo`](cargo.md)   | Субструктура структуры "Груз" |
-| [`dispatch`](gateway.md#dispatch) | object    | [`gateway`](gateway.md) | Субструктура структуры "Пункт доступа" |
-| [`gateway`](gateway.md)           | object    | _корневой элемент_    | Структура "Пункт доступа" |
-| [`max`](cargo.md#max)             | object    | [`dimension`](cargo.md#dimension) | Субструктура субструктуры "Габариты", которая относится к структуре "Груз" |
-| [`payer`](customer.md)            | object\|string | _корневой элемент_ | Строка с уникальный идентификационным кодом, заданным в самой структуре запроса, или сама структура "Контрагент" |
-| [`point`](gateway.md#point)       | object    | [`gateway`](gateway.md) | Субструктура структуры "Пункт доступа" |
-| [`service`](gateway.md#service)   | object    | [`gateway`](gateway.md) | Субструктура структуры "Пункт доступа" |
-| [`wrapping`](cargo.md#wrapping)   | object    | [`cargo`](cargo.md)   | Субструктура структуры "Груз" |
+| Название                          | Тип               | Входит в структуру                         | Краткое описание                                                          |
+| --------                          |-------------------|--------------------------------------------|---------------------------------------------------------------------------|
+| [`cargo`](cargo.md)               | object            | _корневой элемент_                         | Структура "Груз"                                                          |
+| [`customer`](customer.md)         | object            | [`dispatch`<br/>`destination`](gateway.md)                    | Субструктура структуры "Пункт доступа"                                    |
+| [`destination`](gateway.md#destination) | object      | [`gateway`](gateway.md)                    | Субструктура структуры "Пункт доступа"                                    |
+| [`dimension`](cargo.md#dimension) | object            | [`cargo`](cargo.md)                        | Субструктура структуры "Груз"                                             |
+| [`dispatch`](gateway.md#dispatch) | object            | [`gateway`](gateway.md)                    | Субструктура структуры "Пункт доступа"                                    |
+| [`gateway`](gateway.md)           | object            | _корневой элемент_                         | Структура "Пункт доступа"                                                 |
+| [`max`](cargo.md#max)             | object            | [`dimension`](cargo.md#dimension)          | Субструктура субструктуры "Габариты", которая относится к структуре "Груз" |
+| [`payer`](customer.md)            | object<br/>string | _корневой элемент_                         | Строка с уникальный идентификационным кодом, заданным в самой структуре запроса, или сама структура "Контрагент" |
+| [`point`](gateway.md#point)       | object            | [`dispatch`<br/>`destination`](gateway.md) | Субструктура структуры "Пункт доступа" |
+| [`service`](gateway.md#service)   | object            | [`dispatch`<br/>`destination`](gateway.md)                    | Субструктура структуры "Пункт доступа"                                    |
+| [`wrapping`](cargo.md#wrapping)   | object            | [`cargo`](cargo.md)                        | Субструктура структуры "Груз"                                             |
 
 ***
 [▲ Наверх](#up)
