@@ -709,7 +709,7 @@ xhttp.send(JSON.stringify(
       "destination": {
         "point": {
           "location": "Москва",
-          "address": "собаки кусок, 1",
+          "address": "Ячменный пер, 69",
           "date": "2017-06-07",
           "time": {
             "start": "10:00",
