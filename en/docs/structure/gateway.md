@@ -5,7 +5,7 @@
 ## Contents
 
 * [Base structure description](#struct)
-    * [`point` structure (Access point")](#point)
+    * [`point` structure (Access point)](#point)
     * [`service` structure](service.md) _(on another page)_
     * [`customer` structure](customer.md) _(on another page)_
 * [Examples](#example)
@@ -29,25 +29,20 @@ certain structures with a defined key, that this structure is assigned to.
 
 ### <a name="point"/>`point` structure (Access point)
 
-| Name              | Type          | Description                                                                                                                                                                            |
-|-------------------|---------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Name              | Type          | Description                                                                                                                                                                           |
+|-------------------|---------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Required          |
-| `location`        | string        | Unique inner identificator of a location, or a query string to search for                                                                                                              |
+| `location`        | string        | Unique inner identificator of a location, or a query string to search for                                                                                                             |
 | `address`         | string\|array | Particular address for pickup/delivery. Mutually exclusive to `terminal`. Can be array of two strings: `["first address to get a cargo or documents", "second address for the same"]`) |
-| `driverComment`   | string        | Commentary for a pickup/delivery driver. _Ignored, if `terminal` is set_                                                                                                               |
-| `driverDataEmail` | string        | E-mail address where information about pickup/delivery driver will be sent to. _Ignored, if `terminal` is set_ [\[ \* \]](#point-note)                                                 |
-| `terminal`        | string        | Unique inner identificator of a terminal, or set value to `"default"`, which replaces value with a default terminal ID for a specified location                                        |
+| `driverComment`   | string        | Commentary for a pickup/delivery driver. Ignored, if `terminal` is set                                                                                                                |
+| `driverDataEmail` | string        | E-mail address where information about pickup/delivery driver will be sent to. Ignored, if `terminal` is set.<br/><small>We draw your attention to the need to strictly maintain the confidentiality of the information you receive (information about passport data and other data of the representative of the shipping agent - the driver of the vehicle) and to ensure access to such information only to those persons whose job responsibilities include working with such information. By entering your email address, you automatically agree to the terms listed.</small>                                                                         |
+| `terminal`        | string        | Unique inner identificator of a terminal, or set value to `"default"`, which replaces value with a default terminal ID for a specified location                                       |
 | Optional          |   
-| `date`            | string        | Date in `YYYY-MM-DD` format that defines date of pickup/shipping/delivery                                                                                                              |
-| `time`            | object        | Object, that defines time interval for pickup or delivery date                                                                                                                         |
-| `time.start`      | string        | Start of `time` diapason in `HH:mm` format                                                                                                                                             |
-| `time.end`        | string        | End of `time` diapason in `HH:mm` format                                                                                                                                               |
-| `time.fix`        | boolean       | Set to `true`, if you need "fixed time" service (`false` by default)                                                                                                                   |
-
-**\[ \* \]** We draw your attention to the need to strictly maintain the confidentiality of the information you receive
-(information about passport data and other data of the representative of the shipping agent - the driver of the vehicle)
-and to ensure access to such information only to those persons whose job responsibilities include working with such information.
-By entering your email address, you automatically agree to the terms listed.
+| `date`            | string        | Date in `YYYY-MM-DD` format that defines date of pickup/shipping/delivery                                                                                                             |
+| `time`            | object        | Object, that defines time interval for pickup or delivery date                                                                                                                        |
+| `time.start`      | string        | Start of `time` diapason in `HH:mm` format                                                                                                                                            |
+| `time.end`        | string        | End of `time` diapason in `HH:mm` format                                                                                                                                              |
+| `time.fix`        | boolean       | Set to `true`, if you need "fixed time" service (`false` by default)                                                                                                                  |
 
 > The `point` node, where `address` and `terminal` nodes not defined or empty, is considered as `address` node. It works for **cost calculation** request, but **order finalization** returns error.
 
