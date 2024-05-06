@@ -42,7 +42,7 @@ https://vozovoz.ru/api/?param1=value1&param2=value2&param3=value3
 
 ## <a name="example"/>Examples
 
-For standard practice that URI will be enough to use if you set [Request body](post.md) right:
+For standard practice this URI below will be enough to use if you set [Request body](post.md) and [token](auth.md) right:
 ```
 https://vozovoz.ru/api/?token=yourToken
 ```
