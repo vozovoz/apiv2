@@ -115,4 +115,4 @@ xhttp.send(JSON.stringify(
 
 
 ***
-[▲ Наверх](#up)
+[▲ Up](#up)

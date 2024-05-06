@@ -4,7 +4,7 @@
 
 ## Quick start
 
-We use JSON format for data exchange.
+We use JSON format for any data exchange.
 Use `POST` to send a request, and put JSON object into [the body of that request](params/post.md).
 To use Vozovoz API you need [an authentication token (auth token)](params/auth.md) for every request.
 You can put it in [Query](params/get.md) or in a [request body](params/post.md).

@@ -1,60 +1,71 @@
 # <a name="up"/>Vozovoz API 2.5
 
-[Главная страница](/README.md) > [Структуры данных запроса](index.md) > Пункт доступа
+[Main page](/en/README.md) > [Request data structures](index.md) > Gateway
 
-## Содержание
+## Contents
 
-* [Описание структуры данных](#struct)
-    * [Структура `point` ("Точка доступа")](#point)
-    * [Структура `service` ("Услуги")](service.md) _(на другой странице)_
-    * [Структура `customer` ("Контрагент")](customer.md) _(на другой странице)_
-* [Примеры](#example)
-
-
-## <a name="struct"/>Описание структуры данных
-
-Структура `gateway` (Пункт доступа) всегда состоит из двух узлов, имеющих схожую субструктуру. Это `dispatch`
-(пункт отправления) и `destination` (пункт получения). Далее будет описана их структурная составляющая. Если
-специальных пометок нет, то подразумевается, что описанные узлы находятся в обоих узлах и содержат схожие данные.
-
->В данной документации для упрощения понимания **_структурами_** называются все данные, которые содержат какие-либо данные
->(как другие структуры, так и простые типы данных: строка, число, логический тип).
->Под ["параметрами"](../params/index.md) мы понимаем необходимый **полный** массив данных, что передаётся нашему серверу
->для получения определённого ответа. Приведённые структуры указываются внутри [POST-параметра](../params/post.md) `params`.
+* [Base structure description](#struct)
+    * [`point` structure (Access point")](#point)
+    * [`service` structure](service.md) _(on another page)_
+    * [`customer` structure](customer.md) _(on another page)_
+* [Examples](#example)
 
 
-### <a name="point"/>Структура данных `point` ("Точка доступа")
+## <a name="struct"/>Base structure description
 
-| Название      | Тип       | Описание                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
-| --------      | ---       |-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Обязательные
-| `location`    | string    | Строка, содержащая уникальный внутренний ID локации, или же строку запроса для идентификации локации                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
-| `address`     | string&#124;array | Строка адреса, для уточнения забора/доставки. Узел взаимоисключащий с `terminal` (Может быть массивом двух строк: `["первый адрес", "второй"]`)                                                                                                                                                                                                                                                                                                                                                                                                                 |
-| `driverComment` | string  | Строка с комментарием водителю. _Игнорируется, если указан терминал_                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
-| `driverDataEmail` | string | Строка, содержащая e-mail* для получения данных водителя. _Игнорируется, если указан терминал_ <br/><small>* Обращаем Ваше внимание на необходимость строгого соблюдения конфиденциальности полученной Вами информации (сведений о паспортных данных и иных данных представителя экспедитора – водителя транспортного средства) и обеспечения доступа к такой информации только тем лицам, в чьи должностные обязанности входит работа с такой информацией. Указывая адрес электронной почты, Вы автоматически соглашаетесь с перечисленными условиями.</small> |
-| `terminal`    | string    | Строка, содержащая уникальный внутренний ID терминала, либо кодовое слово `default`, которое позволит выбрать терминал по умолчанию для указанной локации                                                                                                                                                                                                                                                                                                                                                                                                       |
-| Необязательные
-| `date`        | string    | Строка с датой формата `YYYY-MM-DD`, определяющая дату отправки или получения                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
-| `time`<br/>-`start`<br/>-`end`<br/>-`fix` | object<br/>- string<br/>- string<br/>- boolean | Объект, определяющий временной промежуток для даты забора или отвоза<br/>- начало диапазона в формате `HH:mm`<br/>- конец диапазона в формате `HH:mm`<br/>- фиксированное время забора/отвоза                                                                                                                                                                                                                                                                                                                                                                   |
+`gateway` structure always consists of two nodes, that have similar structure.
+They are `dispatch` (describes 'left part', where a shipment goes from, shipper information, etc.)
+and `destination` (describes 'right part', where to deliver, receiver information, etc.).
+If there are no special notes, consider that every described structure below can be in any of the these nodes.
 
-> Если при **расчёте стоимости** узлы `address` и `terminal` будут не указаны или пусты, то данные ответа будут рассчитаны для варианта `address`.
-> При **оформлении заказа** `address` также будет считаться вариантом по умолчанию, однако, оформление заказа с пустым адресом невозможно.
+>In this manual for easier understanding a word **_structures_** will be used
+to name any structured data (mostly that contains other structures inside,
+but also that contains simple data types, like string, number, boolean).
+We name **full** necessary data object, that used in a request to our server
+&mdash; ["parameters"](../params/index.md). Key to pass "parameters" into a request
+called "params". More about that [here](../params/post.md). And we name **_nodes_**
+certain structures with a defined key, that this structure is assigned to.
 
 
-**Пример**
-```metadata json
+### <a name="point"/>`point` structure (Access point)
+
+| Name              | Type          | Description                                                                                                                                                                            |
+|-------------------|---------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Required          |
+| `location`        | string        | Unique inner identificator of a location, or a query string to search for                                                                                                              |
+| `address`         | string\|array | Particular address for pickup/delivery. Mutually exclusive to `terminal`. Can be array of two strings: `["first address to get a cargo or documents", "second address for the same"]`) |
+| `driverComment`   | string        | Commentary for a pickup/delivery driver. _Ignored, if `terminal` is set_                                                                                                               |
+| `driverDataEmail` | string        | E-mail address where information about pickup/delivery driver will be sent to. _Ignored, if `terminal` is set_ [\[ \* \]](#point-note)                                                 |
+| `terminal`        | string        | Unique inner identificator of a terminal, or set value to `"default"`, which replaces value with a default terminal ID for a specified location                                        |
+| Optional          |   
+| `date`            | string        | Date in `YYYY-MM-DD` format that defines date of pickup/shipping/delivery                                                                                                              |
+| `time`            | object        | Object, that defines time interval for pickup or delivery date                                                                                                                         |
+| `time.start`      | string        | Start of `time` diapason in `HH:mm` format                                                                                                                                             |
+| `time.end`        | string        | End of `time` diapason in `HH:mm` format                                                                                                                                               |
+| `time.fix`        | boolean       | Set to `true`, if you need "fixed time" service (`false` by default)                                                                                                                   |
+
+**\[ \* \]** We draw your attention to the need to strictly maintain the confidentiality of the information you receive
+(information about passport data and other data of the representative of the shipping agent - the driver of the vehicle)
+and to ensure access to such information only to those persons whose job responsibilities include working with such information.
+By entering your email address, you automatically agree to the terms listed.
+
+> The `point` node, where `address` and `terminal` nodes not defined or empty, is considered as `address` node. It works for **cost calculation** request, but **order finalization** returns error.
+
+
+**Example**
+```javascript
 {
-  "location": "Санкт-Петербург", // строка запроса локации
-  "address": "Северный пр., 18", // строка адреса, например, можно изменить на "terminal": "default"
-  "date": "2017-05-26", // дата забора или отвоза, зависит от того в каком узле ("dispatch" или "destination" соответственно) указано
-  "time": { // время забора/отвоза
-    "start": "14:00", // начало диапазона
-    "end": "18:00", // конец диапазона
-    "fix": true // фиксированное время забора или отвоза
+  "location": "Санкт-Петербург", // location query string
+  "address": "Северный пр., 18", // address string, can be replaced with "terminal": "default"
+  "date": "2017-05-26", // date of pickup/delivery, depends on the node ("dispatch" или "destination" respectively)
+  "time": { // time of pickup/delivery
+    "start": "14:00", // start of time period
+    "end": "15:00", // end of time period
+    "fix": true // fixed time service
   }
 }
 ```
 
 
 ***
-[▲ Наверх](#up)
+[▲ Up](#up)

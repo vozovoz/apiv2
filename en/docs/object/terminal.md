@@ -127,4 +127,4 @@ xhttp.send(JSON.stringify(
 | `note`        | string    | Заметки по терминалу для клиентов |
 
 ***
-[▲ Наверх](#up)
+[▲ Up](#up)

@@ -1,14 +1,14 @@
 # <a name="up"/>Vozovoz API 2.5
 
-[Главная страница](/README.md) > [Структуры данных запроса](index.md) > Даты изменения этапов заказа
+[Main page](/en/README.md) > [Request data structures](index.md) > Order step dates
 
-## Содержание
+## Contents
 
-* [Пример структуры](#example)
-* [Описание структуры](#description)
-* [Где используется](#used)
+* [Example](#example)
+* [Description](#description)
+* [Where is used](#used)
 
-## <a name="example"/>Пример структуры
+## <a name="example"/>Example
 
 ```javascript
 {
@@ -22,23 +22,22 @@
 }
 ```
 
+## <a name="description"/>Description
 
-## <a name="description"/>Описание структуры
-
-| Узел          | Тип       | Описание |
-| ----          | ---       | -------- |
-| `created`     | string    | Дата оформления заказа |
-| `taken`       | string    | Дата приёма груза на терминале отправления |
-| `shipped`     | string    | Дата отправки груза с терминала отправления |
-| `arrived`     | string    | Дата доставки груза на терминал получения |
-| `given`       | string    | Дата выдачи груза клиенту |
+| Node      | Type   | Description                                    |
+|-----------|--------|------------------------------------------------|
+| `created` | string | Date of order creation                         |
+| `taken`   | string | Date of cargo reception at a shipping terminal |
+| `shipped` | string | Date of shipping from a shipping terminal      |
+| `arrived` | string | Date of delivery at a warehouse terminal       |
+| `given`   | string | Date of receiving shipment by a customer       |
 
 
-## <a name="used"/>Где используется
+## <a name="used"/>Where is used
 
-| Объект        | Действие      | Описание |
-| ------        | --------      | -------- |
-| `order`       | `get`         | Является одним из корневых узлов ответа на запрос |
+| Object  | Action | Description                              |
+|---------|--------|------------------------------------------|
+| `order` | `get`  | Comes as one of root nodes in a response |
 
 ***
-[▲ Наверх](#up)
+[▲ Up](#up)

@@ -1,60 +1,60 @@
 # <a name="up"/>Vozovoz API 2.5
 
-[Главная страница](/README.md) > [Структуры данных запроса](index.md) > Наложенный платёж
+[Main page](/en/README.md) > [Request data structures](index.md) > Cash-on-delivery functionality (COD for short)
 
-## Содержание
+## Contents
 
-* [Пример структуры](#example)
-* [Описание структуры](#description)
-* [Где используется](#used)
+* [Example](#example)
+* [Description](#description)
+* [Where is used?](#used)
 
-## <a name="example"/>Пример структуры
+## <a name="example"/>Example
 
-```metadata json
+```javascript
 {
   "cod": {
     "list": [
       {
-        "code": "MY_SHOP_A0232", // код/артикул
-        "name": "Ванильная любовь с солёными слезами", // наименование продукта
-        "quantity": 4, // кол-во 
-        "price": 99.68 // цена за шт.
+        "code": "MY_SHOP_A0232", // stock/product identification number
+        "name": "Телевизор", // product name
+        "quantity": 4, // quantity of this product
+        "price": 99.68 // cost by piece
       },
       {
-        "code": "MY_SHOP_B0371", // код/артикул
-        "name": "Вкусная ненависть с ананасами", // наименование продукта
-        "quantity": 2, // кол-во
-        "price": 47.55 // цена за шт.
+        "code": "MY_SHOP_B0371", // stock/product identification number
+        "name": "Холодильник", // product name
+        "quantity": 2, // quantity of this product
+        "price": 47.55 // cost by piece
       }
     ],
     "shop": {
-      "date": "2020-08-16", // дата оформления заказа в  магазине (будет распечатан на чеке при оплате)
-      "order": "MY-SHOP-2460544 / 16.34233.43" // номер оформленного заказа в магазине (будет распечатан на чеке при оплате)
+      "date": "2020-08-16", // date of the order in the store (will be printed on the bill when checkout)
+      "order": "MY-SHOP-2460544 / 16.34233.43" // name of the order in the store (will be printed on the bill when checkout)
     }
   }
 }
 ```
 
 
-## <a name="description"/>Описание структуры
+## <a name="description"/>Description
 
-| Узел          | Тип       | Описание |
-| ----          | ---       | -------- |
-| `list`        | array     | Массив с объектами наложенного платежа |
-| - `code`      | string    | Код/Артикул продукта наложенного платежа |
-| - `name`      | string    | Наименование продукта наложенного платежа |
-| - `quantity`  | integer   | Количество указанного продукта наложенного платежа |
-| - `price`     | float     | Цена за 1 шт. указанного продукта наложенного платежа |
-| `shop`        | object    | Объект с данными заказа в магазине |
-| - `date`      | string    | Дата оформления заказа в магазине |
-| - `order`     | string    | Номер оформленного заказа в магазине |
+| Node        | Type    | Description                                            |
+|-------------|---------|--------------------------------------------------------|
+| `list`      | array   | Array of COD objects                                   |
+| .`code`     | string  | Product identification number of COD object            |
+| .`name`     | string  | Product name of COD object                             |
+| .`quantity` | integer | Quantity of the product in this COD object (in pieces) |
+| .`price`    | float   | Cost by piece of the product in this COD object        |
+| `shop`      | object  | Object with store order data                           |
+| .`date`     | string  | Date of the order in the store                         |
+| .`order`    | string  | Number of the order in the store                       |
 
 
-## <a name="used"/>Где используется
+## <a name="used"/>Where is used
 
-| Объект        | Действие      | Описание |
-| ------        | --------      | -------- |
-| `order`       | `set`         | Входит в [корневую структуру оформления заказа](../object/order.md#set-struct) |
+| Object  | Action | Description                                                                           |
+|---------|--------|---------------------------------------------------------------------------------------|
+| `order` | `set`  | Used in the [root structure of the order finalization](../object/order.md#set-struct) |
 
 ***
-[▲ Наверх](#up)
+[▲ Up](#up)
