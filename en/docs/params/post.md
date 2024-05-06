@@ -11,7 +11,7 @@
 
 ## <a name="post"/>Request body
 
-Depending on the development environment body of `POST` request sets in different ways. Here some examples. 
+Depending on the development environment, a body of `POST` request can be set in different ways. Here are some examples. 
 
 PHP:
 ```php
@@ -27,9 +27,9 @@ $context = stream_context_create([
 ]);
 
 /* demo server */
-echo file_get_contents('https://vozovoz.org/api/?token=yourToken'/* don't forget to use Your token */, false, $context);
+echo file_get_contents('https://vozovoz.org/api/?token=yourToken'/*replace `yourToken` with your auth token*/, false, $context);
 /* production server */
-// echo file_get_contents('https://vozovoz.ru/api/?token=yourToken'/* don't forget to use Your token */, false, $context);
+// echo file_get_contents('https://vozovoz.ru/api/?token=yourToken'/*replace `yourToken` with your auth token*/, false, $context);
 ```
 
 JavaScript:

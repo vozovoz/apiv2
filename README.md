@@ -3,6 +3,8 @@ Vozovoz API 2.5
 
 [English version](en/README.md)
 
+---------------
+
 Vozovoz API представляет интерфейс для взаимодействия с данными https://vozovoz.ru. В качестве протокола передачи данных используется HTTPS.
 Протестировать взаимодействия с API можно на [демо-сервере](https://vozovoz.org/dev/api/).
 
