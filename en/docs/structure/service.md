@@ -1,129 +1,133 @@
 # <a name="up"/>Vozovoz API 2.5
 
-[Главная страница](/README.md) > [Структуры данных запроса](index.md) > Услуги
+[Main page](/en/README.md) > [Request data structures](index.md) > Services
 
-## Содержание
+## Contents
 
-* [Пример структуры](#example)
-* [Описание структуры](#description)
-    * [Погрузка\Разгрузка](#needLoading)
-    * [Особый вид транспорта](#specLoading)
-    * [Возврат сопроводительных документов](#retrieveAD)
-* [Где используется](#used)
+* [Example](#example)
+* [Description](#description)
+    * [Loading/Offloading](#needLoading)
+    * [Specific transport](#specLoading)
+    * [Return accompanying documents](#retrieveAD)
+* [Where is used](#used)
 
-## <a name="example"/>Пример структуры
+## <a name="example"/>Example
 
 ```javascript
 {
-  "needLoading": { // услуга "погрузка" для пункта отправления или "разгрузка" для пункта получения
-    "floor": 12, // этаж, на который требуется погрузка\разгрузка
-    "lift": true, // имеется ли грузовой лифт
+  "needLoading": { // "loading" service for `dispatch` or "offloading" for `destination`
+    "floor": 12, // floor where loading/offloading is needed
+    "lift": true, // sets if there's elevator in a building
   },
-  "specificLoading": [ // услуга "Особый вид транспорта"
-    'openMachine' // уникальный код вида транспорта
+  "specificLoading": [ // "specific transport" service
+    'openMachine' // unique code of a transport vehicle or service
   ],
-  "retrieveAD": { // услуга "Вернуть сопроводительные документы" (присутствует только у пункта отправления)
-    "location": "Санкт-Петербург", // локация возврата, также можно указать уникальный внутренний ID локации
-    "terminal": "default" // терминал, также можно указать уникальный внутренний ID терминала
-    // или использовать "address": "улица, дом"
+  "retrieveAD": { // "return accompanying documents" service (available only for dispatch)
+    "location": "Санкт-Петербург", // location, where to return to (you can also use unique inner identificator)
+    "terminal": "default" // terminal, where to return to (you can also use unique inner identificator)
+    // or use "address": "street, house"
   },
-  "unboxingOnDelivery" : 20 // услуга "Разбор груза при доставке до адреса"
-  // значением является вес груза (кг), который предполагается разбирать
+  "unboxingOnDelivery" : 20 // "unboxing package upon address delivery" service
+  // the value is the weight of the cargo, that needs unboxing, in kilograms
 }
 ```
 
-## <a name="description"/>Описание структуры
+## <a name="description"/>Description
 
-| Узел              | Тип       | Доступность               | Описание                                                                                                                 |
-| ----              | ---       |---------------------------|--------------------------------------------------------------------------------------------------------------------------|
-| [`needLoading`](#needLoading) | object    | Отправление и получение   | Сервис "Погрузка" для пункта отправления или "Разгрузка" для пункта получения                                            |
-| [`specificLoading`](#specLoading) | array     | Отправление и получение   | Сервис "Особый вид транспорта". Передаётся как массив значений, но на данный момент может содержать только одно значение |
-| [`retrieveAD`](#retrieveAD) | object    | Отправление               | Сервис "Возврат сопроводительных документов"                                                                             |
-| [`scannedConsignationNote`](#scn) | boolean | Отправление               | Сканы накладной на выдачу                                                                                                |
-| [`unboxingOnDelivery`](#uod) | float | Отправление или получение | Вес груза (кг) для услуги "Разбор при доставке до адреса"                                                                |
+| Node                              | Type    | Available for                           | Description                                                                                                               |
+|-----------------------------------|---------|-----------------------------------------|---------------------------------------------------------------------------------------------------------------------------|
+| [`needLoading`](#needLoading)     | object  | `dispatch` and `destination` both       | "Loading" service for pickup at a particular address or "Offloading" for delivery to a particular address                 |
+| [`specificLoading`](#specLoading) | array   | `dispatch` and `destination` both       | "Specific transport" service. Array of codes, that represent types of transport needed for "loading"/"offloading" service |
+| [`retrieveAD`](#retrieveAD)       | object  | `dispatch` only                         | "Return accompanying documents" service                                                                                   |
+| [`scannedConsignationNote`](#scn) | boolean | `dispatch` only                         | Scan of a consignation note                                                                                               |
+| [`unboxingOnDelivery`](#uod)      | float   | `dispatch` or `destination` exclusively | Weight of the cargo after unboxing (kg) for "Unboxing on delivery" service                                                |
 
-### <a name="needLoading"/>Погрузка\Разгрузка
+### <a name="needLoading"/>Loading/Offloading
 
-| Узел          | Тип           | Описание |
-| ----          | ---           | -------- |
-| `floor`       | integer       | Этаж, на котором будут производится погрузочно-разгрузочные работы |
-| `lift`        | boolean       | Есть ли в подъезде грузовой лифт. По умолчанию `false` _(лифта нет)_ |
-| `used`        | boolean       | Пользоваться ли данной услугой. Можно не указывать, т.к. считается `true`, если узел `needLoading` передан в запрос |
+Used only when pickup/delivery option is `address`.
 
-### <a name="specLoading"/>Особый вид транспорта
+| Node    | Type    | Description                                                                                                                     |
+|---------|---------|---------------------------------------------------------------------------------------------------------------------------------|
+| `floor` | integer | The floor where cargo will be picked up for shipping or received respectively                                                   |
+| `lift`  | boolean | Is there elevator/lift to use for loading/offloading service. `false` by default _(no lift)_                                    |
+| `used`  | boolean | Is the service is 'on' or 'off'. Can be omitted, because is considered `true`, if the `needLoading` node passed in the request. |
 
-Внутри массива могут быть следующие значения:
+### <a name="specLoading"/>Specific transport
 
-| Код           | Наименование      | Описание |
-| ---           | ------------      | -------- |
-| `lateralLoad` | Боковая загрузка  | При погрузо-разгрузочных работах должна быть возможность открыть кузов с боку (правого или левого) транспортного средства |
-| `manipulator` | Манипулятор       | Транспортное средство должно быть оснащено подъемным краном с вылетом стрелы не менее 8 метров и грузоподъемность при таком вылете не менее 1 тонны |
-| `openMachine` | Открытая машина   | Клиенту подается транспортное средство с открытым кузовом (только борта, без тента) |
-| `removableCurtains` | Растентовка | При погрузо-разгрузочных работах снимается тент с кузова транспортного средства |
-| `tailLift`    | Гидроборт         | Транспортное средство должно быть оснащено подъемным механизмом (лопата) грузоподъемностью не менее 500 кг |
-| `topLoad`     | Верхняя загрузка  | При погрузо-разгрузочных работах должна быть возможность открыть кузов сверху транспортного средства для погрузки груза с применением подъемного крана |
+Used only when pickup/delivery option is `address`. The array can contain the following codes:
 
-> Данная услуга передаётся как массив значений, но на данный момент может содержать только одно значение для каждого пункта.
+| Code                | Short description | Full description                                                                                                                               |
+|---------------------|-------------------|------------------------------------------------------------------------------------------------------------------------------------------------|
+| `lateralLoad`       | Lateral loading   | During loading and unloading operations, it must be possible to open the body from the side (right or left) of the vehicle.                    |
+| `manipulator`       | Articulated arm   | The vehicle must be equipped with a crane with a boom outreach of at least 8 meters and a lifting capacity of at least 1 ton at this outreach. |
+| `openMachine`       | Pick up truck     | The client is provided with a vehicle with an open body (only sides, no awning).                                                               |
+| `removableCurtains` | Removable awning  | During loading and unloading operations, the awning is removed from the vehicle body.                                                          |
+| `tailLift`          | Tail lift         | The vehicle must be equipped with a lifting mechanism (shovel-hoisting) with a lifting capacity of at least 500 kg.                            |
+| `topLoad`           | Removable top     | During loading and unloading operations, it must be possible to open the top of the vehicle's body for cargo loading using a lifting crane.    |
 
-### <a name="retrieveAD"/>Возврат сопроводительных документов
+> In most cases one type excludes another, but some types don't. Ask us any questions at [api@vozovoz.ru](mailto://api@vozovoz.ru).
 
->Учтите, что по умолчанию данные для этой услуги берутся из данных пункта отправления. Поэтому, если Вам не требуется менять эти значения, можно указать:
+### <a name="retrieveAD"/>Return accompanying documents
+
+>Please note that by default, the data for this service is taken from the dispatch point. Therefore, if you okay with these values, you can specify:
 >```
 >{
->  // другие услуги тут, если необходимы
+>  // place other services here or below, if you need any
 >  "retrieveAD": {}
+>  // below
 >}
 >```
->Или для упрощения понимая, так:
+>Or for a simplicity in this way:
 >```
 >{
->  // другие услуги тут, если необходимы
+>  // place other services here or below, if you need any
 >  "retrieveAD": {
 >    "used": true
 >  }
+>  // below
 >}
 
-| Узел          | Тип           | Описание |
-| ----          | ---           | -------- |
-| `address`     | string        | Не должен быть указан, если возврат требуется на терминал. Должен содержать строку с необходимым адресом относительно указанной локации |
-| `location`    | string        | Может быть как уникальным внутренним ID локации, так и строкой запроса, например, "Санкт-Петербург" |
-| `terminal`    | string        | Не должен быть указан, если возврат требуется на адрес. Может содержать как уникальный внутренний ID терминала, так и значение `default`, для выбора терминала по умолчанию |
-| `scanned`     | boolean       | Добавить ли доп.услугу "Сканы СД" |
-| `used`        | boolean       | Пользоваться ли данной услугой. Можно не указывать, т.к. считается `true`, если узел `retrieveAD` передан в запрос |
+| Node       | Type    | Description                                                                                                                                                                           |
+|------------|---------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `address`  | string  | Must be a string with the required address relative to the specified location. Should be omitted, if a return A.D. is required to a terminal.                                         |
+| `location` | string  | Can be either a unique internal location ID or a query string, for example, "Санкт-Петербург"                                                                                         |
+| `terminal` | string  | Can be either a unique internal terminal ID or a `default` value to select the default terminal of the specified location. Should be omitted if a return A.D. is required to address. |
+| `scanned`  | boolean | Set to `true` in case you also need scanned copies of accompanying documents. `false` by default.                                                                                     |
+| `used`     | boolean | Is the service is 'on' or 'off'. Can be omitted, because is considered `true`, if the `retrieveAD` node passed in the request.                                                        |
 
-> В случае одновременного указания узлов `address` и `terminal`, первоочередным считается `address`. Внимательно проверяйте структуру запроса перед отправкой!
+>If `address` and `terminal` nodes are specified simultaneously, `address` takes precedence. Carefully check the request structure before sending!
 >
-> Любой из указанных узлов может быть "опущен" (не указан), значения для него будут взяты из пункта отправления `gateway.dispatch.point`
+>Any of the specified nodes can be omitted (not specified), the values for it will be taken from the dispatch point `gateway.dispatch.point`
 
-### <a name="scn"/>Сканы накладной на выдачу
+### <a name="scn"/>Scan of consignation note
 
 >```
 >{
 >  "scannedConsignationNote": true
 >}
 
-| Узел          | Тип           | Описание |
-| ----          | ---           | -------- |
-| `scannedConsignationNote` | boolean | Пользоваться ли данной услугой |
+| Node                      | Type    | Description                                          |
+|---------------------------|---------|------------------------------------------------------|
+| `scannedConsignationNote` | boolean | Is the service is 'on' of 'off'. `false` by default. |
 
 
-### <a name="uod"/>Разбор груза при доставке до адреса
+### <a name="uod"/>Unboxing on delivery to an address
 
 >```
 >{
 >  "unboxingOnDelivery": 16.3
 >}
 
-| Узел                 | Тип           | Описание                |
-|----------------------| ---           |-------------------------|
-| `unboxingOnDelivery` | float | Вес груза в килограммах |
+| Node                 | Type  | Descripion                                            |
+|----------------------|-------|-------------------------------------------------------|
+| `unboxingOnDelivery` | float | Weight of the cargo (in kilograms) after the unboxing |
 
-## <a name="used"/>Где используется
+## <a name="used"/>Where is used
 
-| Объект        | Действие      | Описание |
-| ------        | --------      | -------- |
-| `order`       | `set`         | Может быть указан в узлах `gateway.dispatch` (пункт отправления) и `gateway.destination` (пункт получения) |
-| `price`       | `get`         | Может быть указан в узлах `gateway.dispatch` (пункт отправления) и `gateway.destination` (пункт получения) |
+| Object   | Action | Description                                                   |
+|----------|--------|---------------------------------------------------------------|
+| `order`  | `set`  | Can be presented in `gateway.dispatch`, `gateway.destination` |
+| `price`  | `get`  | Can be presented in `gateway.dispatch`, `gateway.destination` |
 
 ***
 [▲ Up](#up)
