@@ -1,27 +1,27 @@
 # <a name="up"/>Vozovoz API 2.5
 
-[Главная страница](/README.md) > [Объекты](index.md) > Локация
+[Main page](/en/README.md) > [Objects](index.md) > Location
 
-> **Код объекта: `location`**
-
-
-## Содержание
-
-* [Примеры](#example)
-* [Описание](#description)
+> **Object code: `location`**
 
 
-## <a name="example"/>Примеры
+## Contents
 
-* [Пример запроса списка локаций со смещением и ограничением](#limit-offset)
-* [Пример запроса информации по конкретной локации](#guid)
-* [Пример запроса списка локаций по названию локации](#search)
+* [Examples](#example)
+* [Description](#description)
 
-### <a name="limit-offset"/>Пример запроса со смещением и ограничением
 
-**Пример запроса на JavaScript**
+## <a name="example"/>Examples
+
+* [Example of the request with offset and limit](#limit-offset)
+* [Example of requesting information for a specific location](#guid)
+* [Example of requesting a list of locations by location name](#search)
+
+### <a name="limit-offset"/>Example of the request with offset and limit
+
+**Example of the request in JavaScript**
 ```javascript
-// полное оформление кода на javascript для использования в консоли см. в разделе "Быстрый старт"
+// full javascript code to use in web browser developer console, see in "Quick start" section
 xhttp.send(JSON.stringify(
 {
   "object": "location",
@@ -33,19 +33,19 @@ xhttp.send(JSON.stringify(
 }
 ```
 
-**Пример ответа**
+**Example of the response**
 ```javascript
 {
   "response": {
     "data": [
       {
-        "guid": "c3b30743-0125-11e5-80c7-00155d903d03",  // уникальный внутренний ID локации
-        "name": "Волгоград", // название населённого пункта
-        "type": "г", // тип населённого пункта
-        "region_str": "Волгоградская обл", // региональная информация
-        "default_terminal": { // терминал по умолчанию
-          "guid": "09c9e60a-c8c7-11e4-80bf-00155d903d03", // уникальный внутренний ID терминала
-          "name": "Домостроителей ул. 13" // информация по терминалу
+        "guid": "c3b30743-0125-11e5-80c7-00155d903d03", // unique internal location ID
+        "name": "Волгоград", // name of the location
+        "type": "г", // type of the location
+        "region_str": "Волгоградская обл", // regional information
+        "default_terminal": { // default terminal
+          "guid": "09c9e60a-c8c7-11e4-80bf-00155d903d03", // unique internal terminal ID
+          "name": "Домостроителей ул. 13" // address(name) of the terminal
         }
       },
       {
@@ -59,85 +59,85 @@ xhttp.send(JSON.stringify(
         }
       }
     ],
-    "meta": { // meta данные
-      "limit": 2, // заданное ограничение
-      "offset": 12, // заданное смещение
-      "total": 33165 // всего записей
+    "meta": { // meta data
+      "limit": 2, // specified limit
+      "offset": 12, // specified offset
+      "total": 33165 // total count of the records for this request
     }
   }
 }
 ```
 
-### <a name="guid"/>Пример запроса информации по конкретной локации
+### <a name="guid"/>Example of requesting information for a specific location
 
-**Пример запроса на JavaScript**
+**Example of the request in JavaScript**
 ```javascript
-// полное оформление кода на javascript для использования в консоли см. в разделе "Быстрый старт"
+// full javascript code to use in web browser developer console, see in "Quick start" section
 xhttp.send(JSON.stringify(
 {
   "object": "location",
   "action": "get",
   "params": {
-    "id": "e90f19de-0128-11e5-80c7-00155d903d03" // уникальный внутренний ID локации
-    // также можно осуществить поиск по названию населённого пункта, см. пример ниже
+    "id": "e90f19de-0128-11e5-80c7-00155d903d03" // unique internal location ID
+    // you can also search by settlements name and region, see example below
   }
 }
 ```
 
-**Пример ответа**
+**Example of the response**
 ```javascript
 {
   "response": {
     "data": [
       {
-        "guid": "e90f19de-0128-11e5-80c7-00155d903d03", // уникальный внутренний ID локации
-        "name": "Санкт-Петербург", // название населённого пункта
-        "type": "г", // тип населённого пункта
-        "region_str": "Город федерального значения", // региональная информация
-        "default_terminal": { // терминал по умолчанию
-          "guid": "0482c0d9-99b8-11e5-80d3-00155d903d03", // уникальный внутренний ID терминала
-          "name": "Народная ул., у дома 65 (Союзпечать 2406)" // информация по терминалу
+        "guid": "e90f19de-0128-11e5-80c7-00155d903d03", // unique internal location ID
+        "name": "Санкт-Петербург", // name of the location
+        "type": "г", // type of the location
+        "region_str": "Город федерального значения", // regional information
+        "default_terminal": { // default terminal
+          "guid": "0482c0d9-99b8-11e5-80d3-00155d903d03", // unique internal terminal ID
+          "name": "Народная ул., у дома 65 (Союзпечать 2406)" // address(name) of the terminal
         }
       }
     ],
-    "meta": { // meta данные
-      "limit": 100, // заданное ограничение
-      "offset": 0, // заданное смещение
-      "total": 33165 // всего записей
+    "meta": { // meta data
+      "limit": 100, // specified limit
+      "offset": 0, // specified offset
+      "total": 33165 // total count of the records for this request
     }
   }
 }
 ```
 
 
-### <a name="search"/>Пример запроса списка локаций по названию локации
+### <a name="search"/>Example of requesting a list of locations by location name
 
-**Пример запроса на JavaScript**
+**Example of the request in JavaScript**
 ```javascript
-// полное оформление кода на javascript для использования в консоли см. в разделе "Быстрый старт"
+// full javascript code to use in web browser developer console, see in "Quick start" section
 xhttp.send(JSON.stringify(
 {
   "object": "location",
   "action": "get",
   "params": {
-    "search": "Киров, Калужская область", // можно указывать так
-    "offset": 0, // необязательно, просто для примера
-    "limit": 3 // необязательно, просто для примера
+    "search": "Киров, Калужская область", // can be specified like this
+    "offset": 0, // optional, just for example
+    "limit": 3 // optional, just for example
   }
 }
 ```
 
-**Пример ответа**
+**Example of the response**
 ```javascript
 {
-  // результаты будут отсортированы по релевантности
+  // results are sorted by relevance
   "response": {
     "data": [
       {
-        "guid": "3b22856a-0126-11e5-80c7-00155d903d03", // уникальный внутренний ID локации
-        "name": "Киров", // название населённого пункта
-        "type": "г", // тип населённого пункта
-        "region_str": "Калужская обл, Кировский р-н" // региональная информация
+        "guid": "3b22856a-0126-11e5-80c7-00155d903d03", // unique internal location ID
+        "name": "Киров", // name of the location
+        "type": "г", // type of the location
+        "region_str": "Калужская обл, Кировский р-н" // regional information
       },
       {
         "guid": "b1633010-0126-11e5-80c7-00155d903d03",
@@ -161,34 +161,36 @@ xhttp.send(JSON.stringify(
 }
 ```
 
-## <a name="description"/>Описание
+## <a name="description"/>Description
 
-Это любой населённый пункт (город, деревня, поселок и др.). Запросить можно как отдельную локацию, так и список.
-
-
-### Данные запроса
-
-> Все данные запроса являются необязательными, т.е. могут отсутствовать. Если ничего не передано, результатом
-> будет список из первых 100 локаций, отсортированных по индексу приоритетности, а затем по наименованию.
-
-| Структура     | Тип       | Описание |
-| ---------     | ---       | -------- |
-| `id`          | string    | Строка с уникальным внутренним ID локации |
-| `limit`       | integer   | Ограничение количества возвращаемых результатов |
-| `offset`      | integer   | Смещение количества возвращаемых результатов |
-| `search`      | string    | Строка, в которой указан населённый пункт. Узел взаимоисключается с узлом `id` |
-| `hasTerminals`| boolean   | Определяет доп.фильтр для выборки. Если `true`, будут возвращены в ответе исключительно локации, имеющие терминал(-ы). Если `false` - исключительно локации, не имеющие терминала(-ов) |
+This is any residential area (city, village, town, etc.). You can request either an individual location or a list.
 
 
-### Данные ответа
+### Request data
 
-| Название      | Тип       | Описание |
-| --------      | ---       | -------- |
-| `guid`        | string    | Строка с уникальным внутренним ID локации |
-| `name`        | string    | Наименование населённого пункта |
-| `region_str`  | string    | Информация по региону населённого пункта (область, район и т.п.) |
-| `type`        | string    | Сокращенный тип населённого пункта |
-| `default_terminal`<br/>-`guid`<br/>-`name` | array<br/>- string<br/>- string | Если у локации есть терминал(-ы), содержит данные терминала по умолчанию<br/>- уникальный внутренний ID терминала<br/>- информация по терминалу |
+> All request data is optional, i.e. can be omitted. If nothing is passed,
+the result will be a list of the first 100 locations, sorted by priority index and then by name.
+
+| Structure      | Type    | Description                                                                                                                                                                                                            |
+|----------------|---------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `id`           | string  | A string with a unique internal location ID                                                                                                                                                                            |
+| `limit`        | integer | Limit the number of results returned                                                                                                                                                                                   |
+| `offset`       | integer | Offset the number of results returned                                                                                                                                                                                  |
+| `search`       | string  | A string containing the location query. The node is mutually exclusive with the `id` node                                                                                                                              |
+| `hasTerminals` | boolean | Specifies an additional filter for the selection. If `true`, only locations that have terminal(s) will be returned in the response. If `false`, only locations that does not. If omitted, this filter won't be applied |
+
+
+### Response data
+
+| Name                    | Type   | Description                                                               |
+|-------------------------|--------|---------------------------------------------------------------------------|
+| `guid`                  | string | A string with a unique internal location ID                               |
+| `name`                  | string | Name of the location                                                      |
+| `region_str`            | string | Information on the location's region (region, district, city, etc.)       |
+| `type`                  | string | Abbreviated type of location                                              |
+| `default_terminal`      | object | If the location has terminal(s), contains data about the default terminal |
+| `default_terminal.guid` | string | ~ A string with a unique internal terminal ID                             |
+| `default_terminal.name` | string | ~ Short address of the terminal                                           |
 
 
 ***

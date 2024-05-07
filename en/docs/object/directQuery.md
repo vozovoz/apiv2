@@ -1,37 +1,37 @@
 # <a name="up"/>Vozovoz API 2.5
 
-[Главная страница](/README.md) > [Объекты](index.md) > Прямой запрос
+[Main page](/en/README.md) > [Objects](index.md) > Direct query
 
-> **Код объекта: `directQuery`**
-
-
-## Содержание
-
-* [Примеры](#example)
-* [Описание](#description)
-* Доступные методы
-    * [Доступные даты отправки груза](directQuery/getDepartureTimetable.md) `getDepartureTimetable`
-    * [Доступные даты получения груза](directQuery/getArrivalTimetable.md) `getArrivalTimetable`
-    * [Список категорий груза](directQuery/getCargoTypes.md) `getCargoTypes`
+> **Object code: `directQuery`**
 
 
-## <a name="example"/>Примеры
+## Contents
 
-**Запрос**
+* [Example](#example)
+* [Description](#description)
+* Available methods:
+    * [Available dates for shipping cargo](directQuery/getDepartureTimetable.md) `getDepartureTimetable`
+    * [Available dates for receiving cargo](directQuery/getArrivalTimetable.md) `getArrivalTimetable`
+    * [Get list of cargo types](directQuery/getCargoTypes.md) `getCargoTypes`
+
+
+## <a name="example"/>Examples
+
+**Request**
 ```javascript
-// полное оформление кода на javascript для использования в консоли см. в разделе "Быстрый старт"
+// full javascript code to use in web browser developer console, see in "Quick start" section
 xhttp.send(JSON.stringify(
 {
   "object": "directQuery",
   "action": "get",
   "params": {
     "method": "test",
-    "data": null // для данного метода не передаётся, в этом случае можно вообще не указывать
+    "data": null // no need to pass it for this method, can be omitted
   }
 }
 ```
 
-**Ответ**
+**Response**
 ```json
 {
   "response": {
@@ -40,23 +40,23 @@ xhttp.send(JSON.stringify(
 }
 ```
 
-## <a name="description"/>Описание
-Представляет собой объект, осуществляющий запрос к базе данных напрямую.
+## <a name="description"/>Description
+Represents an object that queries the database directly.
 
 
-### Данные запроса
+### Request data
 
-| Структура     | Тип | Описание |
-| ---------     | --- | -------- |
-| Обязательные
-| `method`      | string | Название метода, которое необходимо выполнить |
-| Необязательные
-| `data`        | object | Данные, необходимые для работы вызываемого метода |
+| Structure | Type   | Description                                    |
+|-----------|--------|------------------------------------------------|
+| Required  |
+| `method`  | string | Name of the method to call                     |
+| Optional  |
+| `data`    | object | Data required for the specified method to work |
 
 
-### Данные ответа
+### Response data
 
-Данные ответа разнятся в зависимости от вызванного метода.
+The response data varies depending on the method called.
 
 
 ***

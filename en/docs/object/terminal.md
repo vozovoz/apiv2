@@ -1,43 +1,46 @@
 # <a name="up"/>Vozovoz API 2.5
 
-[Главная страница](/README.md) > [Объекты](index.md) > Терминал
+[Main page](/en/README.md) > [Objects](index.md) > Terminal
 
 
-> **Код объекта: `terminal`**
+> **Object code: `terminal`**
 
-## Содержание
+## Contents
 
-* [Описание](#description)
-* [Получение данных по одному или нескольким терминалам](#get)
-    * [Общий пример структуры](#get-example)
-    * [Подробное описание структуры](#get-struct)
-    * [Данные ответа](#get-response)
-        * [Пример ответа](#get-response-example)
-        * [Описание структуры ответа](#get-response-description)
-
-
-## <a name="description"/>Описание
-
-Представляет собой объект, использующийся для получения данных по имеющимся терминалам компании.
-
-> В данной документации для упрощения понимания **_структурами_** называются все данные, которые содержат какие-либо данные
-> (как другие структуры, так и простые типы данных: строка, число, логический тип).
-> Под ["параметрами"](../params/index.md) мы понимаем необходимый **полный** массив данных, что передаётся нашему серверу
-> для получения определённого ответа. Приведённые структуры указываются внутри [POST-параметра](../params/post.md) `params`.
+* [Description](#description)
+* [Getting data for one or more terminals](#get)
+    * [Example](#get-example)
+    * [Description](#get-struct)
+    * [Response data](#get-response)
+        * [Example of a response](#get-response-example)
+        * [Description of a response structure](#get-response-description)
 
 
-## <a name="get"/>Получение данных. Действие `get`
+## <a name="description"/>Description
+
+Represents an object used to obtain data about our transportation terminals.
+
+>In this manual for easier understanding a word **_structures_** will be used
+to name any structured data (mostly that contains other structures inside,
+but also that contains simple data types, like string, number, boolean).
+We name **full** necessary data object, that used in a request to our server
+&mdash; ["parameters"](../params/index.md). Key to pass "parameters" into a request
+called "params". More about that [here](../params/post.md). And we name **_nodes_**
+certain structures with a defined key, that this structure is assigned to.
 
 
-### <a name="get-get"/>Данные запроса
+## <a name="get"/>Getting data. Action `get`
 
-> В данном запросе все структуры являются **_необязательными_**. Т.е. могут отсутствовать.
+
+### <a name="get-get"/>Request data
+
+> In this request every structure is **_optional_**, that is, it can be omitted.
 
 
 #### <a name="get-example"/>Общий пример структуры
 
 ```javascript
-// полное оформление кода на javascript для использования в консоли см. в разделе "Быстрый старт"
+// full javascript code to use in web browser developer console, see in "Quick start" section
 xhttp.send(JSON.stringify(
 {
   "object": "terminal",

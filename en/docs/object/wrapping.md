@@ -1,116 +1,112 @@
 # <a name="up"/>Vozovoz API 2.5
 
-[Главная страница](/README.md) > [Объекты](index.md) > Упаковка
+[Main page](/en/README.md) > [Objects](index.md) > Wrapping
 
 
-> **Код объекта: `wrapping`**
+> **Object code: `wrapping`**
 
-## Содержание
+## Contents
 
-* [Описание](#description)
-* [Получение данных по одному или нескольким терминалам](#get)
-    * [Общий пример структуры](#get-example)
-    * [Подробное описание структуры](#get-struct)
-    * [Данные ответа](#get-response)
-        * [Пример ответа](#get-response-example)
-        * [Описание структуры ответа](#get-response-description)
-
-
-## <a name="description"/>Упаковка
-
-Представляет собой объект, использующийся для получения данных по имеющимся упаковкам для груза.
-
-Упаковки делятся на два вида: количественные и объёмные. Чтобы передать в запросе субструктуру `wrapping`, при
-оформлении заказа или запросе цены Вам
-необходимо указать уникальный код упаковки как ключ, а значение подставлять в зависимости от типа упаковки. Для
-количественных упаковок целочисленные значения подразумевают количество штук указанной упаковки, а для объёмной -
-объём груза (м<sup>3</sup>), который необходимо запаковать.
-
-> В данной документации для упрощения понимания **_структурами_** называются все данные, которые содержат какие-либо данные
-> (как другие структуры, так и простые типы данных: строка, число, логический тип).
-> Под ["параметрами"](../params/index.md) мы понимаем необходимый **полный** массив данных, что передаётся нашему серверу
-> для получения определённого ответа. Приведённые структуры указываются внутри [POST-параметра](../params/post.md) `params`.
+* [Description](#description)
+* [Getting data for one or more wrappings](#get)
+    * [General example of the structure](#get-example)
+    * [Description of the structure](#get-struct)
+    * [Response data](#get-response)
+        * [Example of a response](#get-response-example)
+        * [Description of a response structure](#get-response-description)
 
 
-## <a name="get"/>Получение данных. Действие `get`
+## <a name="description"/>Wrapping
+
+Represents an object used to obtain data of available cargo packages.
+
+Packages are divided into two types: quantitative and volumetric. To pass a `wrapping` structure in a request,
+when finalizing an order or requesting a price you must specify the unique packaging code as a key,
+and set the value depending on the type of packaging.
+For quantitative packages, integer values imply the number of pieces of the specified package,
+and for volumetric ones &mdash; volume of cargo (m<sup>3</sup>) that needs to be packed.
+
+>In this manual for easier understanding a word **_structures_** will be used
+to name any structured data (mostly that contains other structures inside,
+but also that contains simple data types, like string, number, boolean).
+We name **full** necessary data object, that used in a request to our server
+&mdash; ["parameters"](../params/index.md). Key to pass "parameters" into a request
+called "params". More about that [here](../params/post.md). And we name **_nodes_**
+certain structures with a defined key, that this structure is assigned to.
 
 
-### <a name="get-get"/>Данные запроса
-
-> В данном запросе все структуры являются **_необязательными_**. Т.е. могут отсутствовать.
+## <a name="get"/>Getting data. Action `get`
 
 
-#### <a name="get-example"/>Общий пример структуры
+### <a name="get-get"/>Request data
+
+> In this request every structure is **_optional_**, that is, it can be omitted.
+
+#### <a name="get-example"/>General example of the structure
 
 ```javascript
-// полное оформление кода на javascript для использования в консоли см. в разделе "Быстрый старт"
+// full javascript code to use in web browser developer console, see in "Quick start" section
 xhttp.send(JSON.stringify(
 {
   "object": "wrapping",
   "action": "get",
   "params": {
-    "code": "hardBoxVolume", // отобрать информацию по конкретной упаковке
-    // без параметра выше метод вернёт полный список
-    "limit": 0, // кол-во записей
-    "offset": 0 // смещение кол-ва записей
+    "code": "hardBoxVolume", // specify a certain packaging by code
+    // without the parameter above this method will return the full list
+    "limit": 0, // 0 is for default limit
+    "offset": 0
   }
 }
 ```
 
-#### <a name="get-struct"/>Корневая структура. Передаётся напрямую в узел `params`
+#### <a name="get-struct"/>Root structure. Passed directly into `params` node
 
-| Структура     | Тип       | Описание |
-| ---------     | ---       | -------- |
-| `code`        | string    | Определяет упаковку, для которой нужно вернуть данные. Если не указан, метод возвращает список доступных упаковок |
-| `limit`       | integer   | Ограничивает количество возвращаемых записей |
-| `offset`      | integer   | Задаёт смещение количества возвращаемых записей |
+| Structure   | Type    | Description                                                                                                                    |
+|-------------|---------|--------------------------------------------------------------------------------------------------------------------------------|
+| `code`      | string  | Specifies the package for which data should be returned. If not specified, the method returns a list of all available packages |
+| `limit`     | integer | Limits the number of records returned                                                                                          |
+| `offset`    | integer | Sets the offset for the number of records returned                                                                             |
 
 
-### <a name="get-response"/>Данные ответа
+### <a name="get-response"/>Response data
 
-* [Пример ответа](#get-response-example)
-* [Описание данных ответа](#get-response-description)
+* [Example of a response](#get-response-example)
+* [Description of a response data](#get-response-description)
 
-<a name="get-response-example"/>Пример ответа:
+<a name="get-response-example"/>Example of a response:
 
 ```javascript
 {
   "response": [
     {
-      "code": "hardPackageVolume", // уникальный код упаковки
-      "name": "Жёсткая упаковка", // наименование
-      "type": "volume", // упаковка принадлежит типу "объёмная"
-      // т.е. при передаче её значений в других запросах, они должны быть дробными положительными числами,
-      // отражающими объём груза, требующий упаковки
-      "description": "Описание для клиента"
+      "code": "hardPackageVolume", // unique code of the wrapping
+      "name": "Жёсткая упаковка", // name of the wrapping
+      "type": "volume", // type of the wrapping is volumetric
+      // it means, that passing its values in other requests, these values must be frational positive numbers 
+      // that specify the volume of cargo that requires packaging
+      "description": "Description for the client in Russian"
     },
     {
       "code": "box3",
       "name": "Коробка 40×40×20 см",
-      "type": "numeric", // упаковка принадлежит типу "количественная"
-      // т.е. при передаче её значений в других запросах, они должны быть целыми положительными числами,
-      // отражающими количество данных упаковок
+      "type": "numeric", // type of the wrapping is quantitative
+      // it means, that passing its values in other requests, these values must be positive integers, 
+      // that specify the quantity of these packages
       "description": "Описание для клиента"
     }
-    // кол-во терминалов зависит от их количества по указанному запросу и узла `limit`
+    // the number of results depends on their number for this request and the `limit` node
   ]
 }
 ```
 
-<a name="get-response-description"/>Описание данных ответа:
+<a name="get-response-description"/>Description of a response data:
 
-| Название      | Тип       | Описание |
-| --------      | ---       | -------- |
-| `code`        | string    | Уникальный код упаковки |
-| `description` | string    | Описание упаковки для клиента |
-| `name`        | string    | Наименование (расшифрока) упаковки |
-| `type`        | string    | Тип упаковки. Может быть `numeric` (количественная) и `volume` (объёмная) |
-
->Упаковки делятся на два вида: количественные и объёмные. Чтобы передать в запросе субструктуру `wrapping`, при
->оформлении заказа или запроса цены Вам
->необходимо указать уникальный код упаковки как ключ, а значение подставлять в зависимости от типа упаковки. Для
->количественных упаковок целочисленные значения подразумевают количество штук указанной упаковки, а для объёмной -
->объём груза (м<sup>3</sup>), который необходимо запаковать.
+| Name          | Type   | Description                                                                   |
+|---------------|--------|-------------------------------------------------------------------------------|
+| `code`        | string | Unique code of the wrapping                                                   |
+| `description` | string | Description of the wrapping                                                   |
+| `name`        | string | Name (definition) of the wrapping                                             |
+| `type`        | string | Type of the wrapping. Can be `numeric` (quantitative) и `volume` (volumetric) |
 
 ***
 [▲ Up](#up)

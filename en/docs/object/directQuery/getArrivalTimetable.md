@@ -1,21 +1,21 @@
 # <a name="up"/>Vozovoz API 2.5
 
-[Главная страница](/README.md) > [Объекты](../index.md) > [Прямой запрос](../directQuery.md) > Расписание дат получения груза
+[Main page](/en/README.md) > [Objects](../index.md) > [Direct query](../directQuery.md) > Расписание дат получения груза
 
-> **Код объекта: `directQuery`**
-> **Код метода: `getArrivalTimetable`**
+> **Object code: `directQuery`**<br/>
+**Method code: `getArrivalTimetable`**
 
 
-## Содержание
+## Contents
 
-* [Примеры](#example)
-* [Описание](#description)
+* [Example](#example)
+* [Description](#description)
 
 ## <a name="example"/>Примеры
 
-**Запрос**
+**Request**
 ```javascript
-// полное оформление кода на javascript для использования в консоли см. в разделе "Быстрый старт"
+// full javascript code to use in web browser developer console, see in "Quick start" section
 xhttp.send(JSON.stringify(
 {
   "object": "directQuery",
@@ -41,7 +41,7 @@ xhttp.send(JSON.stringify(
 }));
 ```
 
-<a name="response-example"/>**Ответ**
+<a name="response-example"/>**Response**
 
 ```javascript
 {
@@ -122,7 +122,7 @@ xhttp.send(JSON.stringify(
 ```
 
 
-## <a name="description"/>Описание
+## <a name="description"/>Description
 Объект [прямого запроса](../directQuery.md) с использованием метода `getArrivalTimetable` возвращает расписание
 доступных дат доставки груза.
 
@@ -148,7 +148,7 @@ xhttp.send(JSON.stringify(
 >* `dates` (объект) с узлом `to` - нижняя граница диапазона отправки. Обязателен, если отправка от адреса
 
 
-### Данные ответа
+### Response data
 
 > Данные ответа описаны в виде комментариев в [примере выше](#response-example).
 

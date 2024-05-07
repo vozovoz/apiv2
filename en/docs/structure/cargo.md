@@ -193,7 +193,7 @@ xhttp.send(JSON.stringify(
           "quantity": 2, // quantity of the colli with the same dimensions,
           // in other words, if dimensions are the same, you just write here quantity of such colli
           "weight": 10, // weight of the collo
-          "wrapping": { // here used only volume wrapping
+          "wrapping": { // here used only volumetric wrapping
             "bubbleFilmVolume": 0.5
           }
         },
@@ -203,7 +203,7 @@ xhttp.send(JSON.stringify(
           "height": 0.5,
           "quantity": 3,
           "weight": 8,
-          "wrapping": {} // here used only volume wrapping
+          "wrapping": {} // here used only volumetric wrapping
         }
       ]
     },

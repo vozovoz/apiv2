@@ -1,12 +1,12 @@
 # <a name="up"/>Vozovoz API 2.5
 
-[Главная страница](/README.md) > [Объекты](../index.md) > [Прямой запрос](../directQuery.md) > Категории груза
+[Main page](/en/README.md) > [Objects](../index.md) > [Прямой запрос](../directQuery.md) > Категории груза
 
-> **Код объекта: `directQuery`**
+> **Object code: `directQuery`**
 > **Код метода: `getCargoTypes`**
 
 
-## Содержание
+## Contents
 
 * [Примеры](#example)
 * [Описание](#description)
@@ -15,7 +15,7 @@
 
 **Запрос**
 ```javascript
-// полное оформление кода на javascript для использования в консоли см. в разделе "Быстрый старт"
+// full javascript code to use in web browser developer console, see in "Quick start" section
 xhttp.send(JSON.stringify(
 {
   "object": "directQuery",

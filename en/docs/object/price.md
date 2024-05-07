@@ -1,45 +1,45 @@
 # <a name="up"/>Vozovoz API 2.5
 
-[Главная страница](/README.md) > [Объекты](index.md) > Стоимость
+[Main page](/en/README.md) > [Objects](index.md) > Cost of an order
 
 
-> **Код объекта: `price`**
+> **Object code: `price`**
 
 
-## Содержание
+## Contents
 
-* [Примеры](#example)
-* [Описание](#description)
+* [Examples](#example)
+* [Description](#description)
 
 
-## <a name="example"/>Примеры
+## <a name="example"/>Examples
 
-**Пример запроса на JavaScript**
+**Example of the request in JavaScript**
 ```javascript
-// полное оформление кода на javascript для использования в консоли см. в разделе "Быстрый старт"
+// full javascript code to use in web browser developer console, see in "Quick start" section
 xhttp.send(JSON.stringify(
 {
   "object": "price",
   "action": "get",
   "params": {
     "cargo" : {
-      "dimension": { // габариты
-        "quantity": 1, // количество мест
-        "volume": 0.1, // общий объем
-        "weight": 0.9 // общий вес
+      "dimension": { // cargo dimensions
+        "quantity": 1, // quantity of colli
+        "volume": 0.1, // general volume
+        "weight": 0.9 // general weight
       }
     },
     "gateway": {
-      "dispatch": { // откуда
+      "dispatch": { // where from (shipping)
         "point": {
           "location": "Санкт-Петербург",
-          "terminal": "default" // терминал по умолчанию
+          "terminal": "default" // default terminal for location "Санкт-Петербург"
         }
       },
-      "destination": { // куда
+      "destination": { // where to (delivery)
         "point": {
           "location": "Москва",
-          "terminal": "default" // терминал по умолчанию
+          "terminal": "default" // default terminal for location "Москва"
         }
       }
     }
@@ -47,7 +47,7 @@ xhttp.send(JSON.stringify(
 }));
 ```
 
-**Пример ответа**
+**Example of the response**
 ```json
 {
   "response": {
@@ -80,29 +80,34 @@ xhttp.send(JSON.stringify(
 ```
 
 
-## <a name="description"/>Описание
-Представляет собой массив услуг с указанной стоимостью, а также общую стоимость без скидки и с учётом скидок.
+## <a name="description"/>Description
+
+Represents an array of services with a specified cost, as well as the total cost with and without discount(s).
 
 
-### Данные запроса
+### Request data
 
-| Структура     | Тип | Описание |
-| ---------     | --- | -------- |
-| Обязательные
-| `cargo`       | object | Структура данных ["Груз"](../structure/cargo.md) |
-| `gateway`     | object | Структура данных ["Пункт доступа"](../structure/gateway.md) |
-| Необязательные
-| `promoCode`   | string | Строка промокода |
+| Structure   | Type   | Description                                    |
+|-------------|--------|------------------------------------------------|
+| Required    |
+| `cargo`     | object | [`cargo` structure](../structure/cargo.md)     |
+| `gateway`   | object | [`gateway` strucutre](../structure/gateway.md) |
+| Optional    | 
+| `promoCode` | string | Contains optional promo code                   |
 
 
-### Данные ответа
+### Response data
 
-| Название      | Тип | Описание |
-| --------      | --- | -------- |
-| basePrice     | integer | Базовая стоимость в рублях (без учёта скидок) |
-| price         | integer | Итоговая стоимость в рублях (с учётом скидок) |
-| service<br/>- name</br>- price | array<br/>- string<br/>- integer | Массив услуг, с указанием наименования и стоимости (со скидкой)<br/>- Наименование услуги<br/>- Стоимость услуги со скидкой |
-| deliveryTime<br/>- from<br/>- to  | object<br/>- integer<br/>- integer | Диапазон срока доставки в днях<br/>- Минимальный срок доставки в днях<br/>- Максимальный срок доставки в днях |
+| Name              | Type    | Description                                                      |
+|-------------------|---------|------------------------------------------------------------------|
+| basePrice         | integer | Basic cost with no discounts (in most cases in Russian rubles)   |
+| price             | integer | Total cost including discounts (in most cases in Russian rubles) |
+| service           | array   | Array of services, indicating the name and cost with discounts   |                                                            
+| service\[n].name  | string  | Name of the service                                              |
+| service\[n].price | integer | Cost of the service with discounts                               |
+| deliveryTime      | object  | Delivery time range in days                                      |
+| deliveryTime.from | integer | Minimum delivery time in days                                    |
+| deliveryTime.to   | integer | Maximum delivery time in days                                    |
 
 
 ***

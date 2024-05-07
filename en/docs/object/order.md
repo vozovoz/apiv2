@@ -1,45 +1,48 @@
 # <a name="up"/>Vozovoz API 2.5
 
-[Главная страница](/README.md) > [Объекты](index.md) > Заказ
+[Main page](/en/README.md) > [Objects](index.md) > Order
 
 
-> **Код объекта: `order`**
+> **Object code: `order`**
 
-## Содержание
+## Contents
 
-* [Описание](#description)
-* [Получение данных по одному или нескольким заказам](#get)
-    * [Общий пример структуры](#get-example)
-    * [Подробное описание структуры](#get-struct)
-    * [Данные ответа](#get-response)
-    * [Примеры](#get-example-full)
-* [Отправка данных. Оформление заказа](#set)
-    * [Общий пример структуры](#set-example)
-    * [Подробное описание структуры](#set-struct)
-    * [Данные ответа](#set-response)
-    * [Примеры](#set-example-full)
-* [Отмена заказа](#cancel)
-
-
-## <a name="description"/>Описание
-
-Представляет собой объект, использующийся для оформления заказа или для получения данных по уже оформленным заказам.
-
-> В данной документации для упрощения понимания **_структурами_** называются все данные, которые содержат какие-либо данные
-> (как другие структуры, так и простые типы данных: строка, число, логический тип).
-> Под ["параметрами"](../params/index.md) мы понимаем необходимый **полный** массив данных, что передаётся нашему серверу
-> для получения определённого ответа. Приведённые структуры указываются внутри [POST-параметра](../params/post.md) `params`.
+* [Description](#description)
+* [Getting data for one or more orders](#get)
+    * [Example of the structure](#get-example)
+    * [Description of the structure](#get-struct)
+    * [Response data](#get-response)
+    * [Examples](#get-example-full)
+* [Sending data. Finalizing an order](#set)
+    * [Example of the structure](#set-example)
+    * [Description of the structure](#set-struct)
+    * [Response data](#set-response)
+    * [Examples](#set-example-full)
+* [Canceling order](#cancel)
 
 
-## <a name="get"/>Получение данных. Действие `get`
+## <a name="description"/>Description
 
-### Данные запроса
+Represents an object used to place (finalize) an order or to obtain data on already placed order(s).
 
-> В данном запросе все структуры являются **_необязательными_**. Т.е. могут отсутствовать.
+>In this manual for easier understanding a word **_structures_** will be used
+to name any structured data (mostly that contains other structures inside,
+but also that contains simple data types, like string, number, boolean).
+We name **full** necessary data object, that used in a request to our server
+&mdash; ["parameters"](../params/index.md). Key to pass "parameters" into a request
+called "params". More about that [here](../params/post.md). And we name **_nodes_**
+certain structures with a defined key, that this structure is assigned to.
+
+
+## <a name="get"/>Getting data. Action `get`
+
+### Request data
+
+> In this request every structure is **_optional_**, that is, it can be omitted.
 
 ***
 
-Быстрая навигация
+Quick navigation
 
 * [Общий пример структуры](#get-example)
 * [Корневая структура](#get-struct)
@@ -54,7 +57,7 @@
 #### <a name="get-example"/>Общий пример структуры
 
 ```javascript
-// полное оформление кода на javascript для использования в консоли см. в разделе "Быстрый старт"
+// full javascript code to use in web browser developer console, see in "Quick start" section
 xhttp.send(JSON.stringify(
 {
   "object": "order",
@@ -508,7 +511,7 @@ xhttp.send(JSON.stringify(
 #### <a name="set-example"/>Общий пример структуры
 
 ```javascript
-// полное оформление кода на javascript для использования в консоли см. в разделе "Быстрый старт"
+// full javascript code to use in web browser developer console, see in "Quick start" section
 xhttp.send(JSON.stringify(
 {
   "object": "order",
@@ -774,7 +777,7 @@ xhttp.send(JSON.stringify(
 **Запрос**
 
 ```javascript
-// полное оформление кода на javascript для использования в консоли см. в разделе "Быстрый старт"
+// full javascript code to use in web browser developer console, see in "Quick start" section
 xhttp.send(JSON.stringify(
 {
   "object": "order",

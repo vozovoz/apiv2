@@ -1,14 +1,14 @@
 # <a name="up"/>Vozovoz API 2.5
 
-[Главная страница](/README.md) > [Объекты](index.md) > Даты доставки
+[Main page](/en/README.md) > [Objects](index.md) > Delivery dates
 
 
-> **Код объекта: `schedule`**
+> **Object code: `schedule`**
 
-## Содержание
+## Contents
 
-* [Описание](#description)
-* [Получение данных. Действие `get`](#get)
+* [Description](#description)
+* [Getting data. Action `get`](#get)
     * [Общий пример структуры](#get-example)
     * [Подробное описание структуры](#get-struct)
     * [Данные ответа](#get-response)
@@ -16,28 +16,32 @@
         * [Пример ответа "терминал-терминал"](#get-response-example-term-term)
 
 
-## <a name="description"/>Описание
+## <a name="description"/>Description
 
-Представляет собой объект, использующийся для получения данных по имеющимся датам доставки.
+Represents an object used to obtain data on available delivery dates.
 
-> В данной документации для упрощения понимания **_структурами_** называются все данные, которые содержат какие-либо данные
-> (как другие структуры, так и простые типы данных: строка, число, логический тип).
-> Под ["параметрами"](../params/index.md) мы понимаем необходимый **полный** массив данных, что передаётся нашему серверу
-> для получения определённого ответа. Приведённые структуры указываются внутри [POST-параметра](../params/post.md) `params`.
+>In this manual for easier understanding a word **_structures_** will be used
+to name any structured data (mostly that contains other structures inside,
+but also that contains simple data types, like string, number, boolean).
+We name **full** necessary data object, that used in a request to our server
+&mdash; ["parameters"](../params/index.md). Key to pass "parameters" into a request
+called "params". More about that [here](../params/post.md). And we name **_nodes_**
+certain structures with a defined key, that this structure is assigned to.
 
 
-## <a name="get"/>Получение данных. Действие `get`
+## <a name="get"/>Getting data. Action `get`
 
 
-### <a name="get-get"/>Данные запроса
+### <a name="get-get"/>Request data
 
-> Узел `date` в объекте `dispatch` является необязательным параметром, однако может в несколько раз сократить время обработки запроса.
-> Учтите также, что передача в запросе уникальных ID локации\терминала также ускоряет время ответа.
+> Узел `date` в объекте `dispatch` является необязательным параметром, однако
+может в несколько раз сократить время обработки запроса. Учтите также, что передача в запросе
+уникальных ID локации\терминала также ускоряет время ответа.
 
 #### <a name="get-example"/>Общий пример структуры
 
 ```javascript
-// полное оформление кода на javascript для использования в консоли см. в разделе "Быстрый старт"
+// full javascript code to use in web browser developer console, see in "Quick start" section
 xhttp.send(JSON.stringify(
 {
   "object": "schedule",

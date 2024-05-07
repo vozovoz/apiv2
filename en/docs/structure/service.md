@@ -23,8 +23,8 @@
     'openMachine' // unique code of a transport vehicle or service
   ],
   "retrieveAD": { // "return accompanying documents" service (available only for dispatch)
-    "location": "Санкт-Петербург", // location, where to return to (you can also use unique inner identificator)
-    "terminal": "default" // terminal, where to return to (you can also use unique inner identificator)
+    "location": "Санкт-Петербург", // location, where to return to (you can also use unique internal ID)
+    "terminal": "default" // terminal, where to return to (you can also use unique internal ID)
     // or use "address": "street, house"
   },
   "unboxingOnDelivery" : 20 // "unboxing package upon address delivery" service
