@@ -6,7 +6,7 @@
 
 * [Example](#example)
 * [Description](#description)
-* [Where is used?](#used)
+* [Where is used](#used)
 
 ## <a name="example"/>Example
 
