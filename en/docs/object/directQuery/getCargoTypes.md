@@ -2,7 +2,7 @@
 
 [Main page](/en/README.md) > [Objects](../index.md) > [Прямой запрос](../directQuery.md) > Cargo types
 
-> **Object code: `directQuery`**
+> **Object code: `directQuery`**<br/>
 > **Method code: `getCargoTypes`**
 
 

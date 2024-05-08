@@ -2,7 +2,7 @@
 
 [Main page](/en/README.md) > [Objects](../index.md) > [Прямой запрос](../directQuery.md) > Schedule of dates for shipping cargo
 
-> **Object code: `directQuery`**
+> **Object code: `directQuery`**<br/>
 > **Method code: `getDepartureTimetable`**
 
 

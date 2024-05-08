@@ -141,8 +141,9 @@ The [direct query](../directQuery.md) object using `getArrivalTimetable` method 
 >
 >Each of these nodes may contain:
 >* `locationId` (string) - unique internal location ID<br/>or
->* `terminalId` (string) - unique internal terminal ID<br/>
->and also `from` node may contain:
+>* `terminalId` (string) - unique internal terminal ID
+>
+>And also `from` node may contain:
 >* `dates` (object) with `to` node - lower limit of a shipping time range. Mandatory if dispatch is address
 
 
