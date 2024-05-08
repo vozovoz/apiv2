@@ -118,7 +118,7 @@ Used only when pickup/delivery option is `address`. The array can contain the fo
 >  "unboxingOnDelivery": 16.3
 >}
 
-| Node                 | Type  | Descripion                                            |
+| Node                 | Type  | Description                                           |
 |----------------------|-------|-------------------------------------------------------|
 | `unboxingOnDelivery` | float | Weight of the cargo (in kilograms) after the unboxing |
 
