@@ -18,7 +18,7 @@
     * [Description of the structure](#set-struct)
     * [Response data](#set-response)
     * [Examples](#set-example-full)
-* [Canceling order](#cancel)
+* [Canceling an order](#cancel)
 
 
 ## <a name="description"/>Description
@@ -44,17 +44,20 @@ certain structures with a defined key, that this structure is assigned to.
 
 Quick navigation
 
-* [Общий пример структуры](#get-example)
-* [Корневая структура](#get-struct)
-    * ["Фильтр заказа"](#get-filters)
-        * ["Фильтр по датам"](#get-filters-dates)
-            * ["Фильтр по датам создания"](#get-filters-dates-created)
-        * ["Фильтр по локациям"](#get-location)
-    * ["Состояние заказа"](#get-mode)
+* [Example of the structure](#get-example)
+* [Root structure](#get-struct)
+    * [Filtering results](#get-filters)
+        * [By date](#get-filters-dates)
+            * [By creation date](#get-filters-dates-created)
+        * [By location](#get-location)
+    * [Order state](#get-mode)
 
 ***
 
-#### <a name="get-example"/>Общий пример структуры
+#### <a name="get-example"/>Example of the structure
+
+In the following example every filter is set, this is done completely for illustration,
+most likely you won't need all of them in one request. So, as you can guess it, pass only the nodes you need.
 
 ```javascript
 // full javascript code to use in web browser developer console, see in "Quick start" section
@@ -64,159 +67,160 @@ xhttp.send(JSON.stringify(
   "action": "get",
   "params": {
     "filters": {
-      "dates": { // фильтр по датам
-        "created": { // дата оформления заказа
-          "from": "2017-05-01", // начальный дата диапазона выборки
-          "to": "2017-06-15" // конечная дата диапазона выборки
+      "dates": { // date filter, all filters inside this object considered to be combined by the AND condition 
+        "created": { // date of the order finalization
+          "from": "2017-05-01", // start of the date diapason for filtering
+          "to": "2017-06-15" // end of the date diapason for filtering
         }
       },
-      "location": {
-        "dispatch": "12345678-1234-1234-1234-123456789012", // фильтр по локации отправления
-        "destination": "12345678-1234-1234-1234-123456789012" // фильтр по локации получения
+      "location": { // all filters inside this object considered to be combined by the AND condition
+        "dispatch": "12345678-1234-1234-1234-123456789012", // dispatch location filter
+        "destination": "12345678-1234-1234-1234-123456789012" // destination location filter
       },
-      "number": [ // может быть одной строкой или массивом любых из указанных ниже данных
-        "12345678-1234-1234-1234-123456789012", // уникальный внутренний идентификатор заказа
-        "700099999", // уникальный внутренний номер заказа
-        "CW23423/dsf332233 (май 2017)" // пользовательский номер заказа, если Вы указывали его при оформлении
+      "number": [ // can be a single string or an array of any of the following 
+        // NOTE: all values inside this array considered to be combined by the OR condition
+        "12345678-1234-1234-1234-123456789012", // unique internal order ID
+        "700099999", // order number
+        "CW23423/dsf332233 (май 2017)" // custom order number, if you specified it in finalization request
       ]
     },
-    "limit": 100, // ограничение количества результатов выборки
-    "offset": 0, // смещение по выборке
-    "mode": { // подробнее см. субструктуру "Состояние заказа"
-      "isCanceled": false, // Должен ли заказ быть отменён для попадания в выборку
-      "isGiven": false, // Должен ли заказ быть выдан для попадания в выборку
-      "isPaid": false, // Должен ли быть оплачен заказ для попадания в выборку
-      "isTaken": true
+    "limit": 100, // limiting the number of selection results
+    "offset": 0, // selection offset
+    "mode": { // for more details, see the structure "Order state"
+      "isCanceled": false, // does the order have to be canceled to be included in the results
+      "isGiven": false, // does the order have to be given out to client to be included in the results
+      "isPaid": false, // does the order have to be paid to be included in the results
+      "isTaken": true // does the order have to be accepted at the dispatch terminal to be included in the results
     },
-    "tab": "onward" // "onward" - В пути, "unpaid" - Неоплаченные, подробнее в структуре...
+    "tab": "onward" // "onward" - On the way, "unpaid" - Speaks for itself, more details in the structure...
   }
 }));
 ```
 
 ***
 
-#### <a name="get-struct"/>Корневая структура. Передаётся напрямую в узел `params`
+#### <a name="get-struct"/>Root structure. Passed directly into the `params` node
 
-| Структура     | Тип       | Описание |
-| ---------     | ---       | -------- |
-| `filters`     | object    | [Структура "Фильтр заказа"](#get-filters) |
-| `limit`       | integer   | Число ограничивает количество заказов, возвращаемых за один запрос |
-| `offset`      | integer   | Число указывает на количество заказов, которые нужно пропустить, прежде чем начать выборку |
-| `mode`        | object    | [Структура "Состояние заказа"](#get-mode). Взаимоисключающий узел с узлом `tab` |
-| `tab`         | string    | Строка, указывающая на предопределённый фильтр заказа. Взаимоисключающий узел с узлом `mode`, поскольку содержит преднастроенные параметры для узла `mode` |
+| Structure | Type    | Description                                                                                                                                           |
+|-----------|---------|-------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `filters` | object  | [Order Filter structure](#get-filters)                                                                                                                |
+| `limit`   | integer | Limits the number of results returned                                                                                                                 |
+| `offset`  | integer | Offsets the number of results returned                                                                                                                |
+| `mode`    | object  | [Order State structure](#get-mode). Mutually exclusive with the `tab` node                                                                            |
+| `tab`     | string  | A string that sets a predefined order filter. Mutually exclusive with the `mode` node, since it contains pre-configured parameters of the `mode` node |
 
->Преопределённые фильтры заказа (узел `tab`), имеющиеся на данный момент:
->* Значение `onward` - "В пути" для узла `tab` определяет следующие значения для узла `mode`:
+>Predefined order filters (`tab` node) that are currently available:
+>* The `onward` value for the `tab` node defines the following values for the `mode` node:
 >```
 >{
->  "isCanceled": false,
->  "isGiven": false
+>  "isCanceled": false, // to be included in results order should not be canceled
+>  "isGiven": false // to be included in results order should not be given out to client
 >}
 >```
->* Значение `unpaid` - "Неоплаченные" для узла `tab` определеяет следующие значения для узла `mode`:
+>* The `unpaid` value for the `tab` node defines the following values for the `mode` node:
 >```
 >{
->  "isCanceled": false,
->  "isPaid": false,
->  "isTaken": true
+>  "isCanceled": false, // to be included in results order should not be canceled
+>  "isPaid": false, // to be included in results order should not be payed at the moment
+>  "isTaken": true // to be included in results order should be accepted at the shipping terminal
 >}
 >```
 
 ***
 
-#### <a name="get-filters"/>Субструктура "Фильтр заказа". Узел `params.filters`
+#### <a name="get-filters"/>Order Filter structure. The `params.filters` node
 
-> Входит в [корневую структуру](#get-struct) данных запроса под узлом `filters`.
+> Part of the [root structure](#get-struct) under the key `filters`.
 
-| Название      | Тип       | Описание |
-| --------      | ---       | -------- |
-| `dates`       | object    | Субструктура ["Фильтр по датам"](#get-filters-dates) |
-| `customer`    | object    | Субструктура ["Фильтр по контрагентам"](#get-filters-customer) |
-| `location`    | object    | Субструктура ["Фильтр по локациям"](#get-filters-location) |
-| `number`      | array\|string | Строка или массив с номерами заказа (или уникальными id заказа, или пользовательскими номерами, который Вы указывали при создании). _В этой структуре данные можно перемешивать как угодно_ |
-
-***
-
-#### <a name="get-filters-dates"/>Субструктура "Фильтр по датам". Узел `params.filters.dates`
-
-> Входит в субструктуру ["Фильтр заказа"](#get-filters) данных запроса под узлом `dates`.
-
-На данный момент доступен только один узел фильтрации дат: `created`. Он отвечает за дату создания заказа.
-
-| Название      | Тип       | Описание |
-| --------      | ---       | -------- |
-| `created`     | object    | Субструктура ["Фильтр по датам создания"](#get-filters-dates-created) |
+| Name       | Type          | Description                                                                                                                                                                         |
+|------------|---------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `dates`    | object        | [Date Filter structure](#get-filters-dates)                                                                                                                                         |
+| `customer` | object        | [Customer Filter structure](#get-filters-customer)                                                                                                                                  |
+| `location` | object        | [Location Filter structure](#get-filters-location)                                                                                                                                  |
+| `number`   | array\|string | A string or array with order numbers (or unique order ID, or custom numbers, that you could specify in order finalization). _In this structure order of the values does not matter_ |
 
 ***
 
-#### <a name="get-filters-dates-created"/>Субструктура "Фильтр по датам создания". Узел `params.filters.dates.created`
+#### <a name="get-filters-dates"/>Date Filter structure. The `params.filters.dates` node
 
-> Входит в субструктуру ["Фильтр по датам"](#get-filters-dates) данных запроса под узлом `created`.
+> Part of the [Order Filter structure](#get-filters) under the key `dates`.
 
-| Название      | Тип       | Описание |
-| --------      | ---       | -------- |
-| `from`        | string    | Строка формата `YYYY-MM-DD`, отвечающая за первую дату диапазона фильтрации по дате создания заказа и до сегодняшнего дня, или дня, указанного в узле `to` |
-| `to`          | string    | Строка формата `YYYY-MM-DD`, отвечающая за последнюю дату диапазона фильтрации по дате создания заказа |
+Currently there is only one date filter node available: `created`. It's responsible for the order creation (finalization) date.
 
-***
-
-#### <a name="get-filters-location"/>Субструктура "Фильтр по локациям". Узел `params.filters.location`
-
-> Входит в субструктуру ["Фильтр заказа"](#get-filters) данных запроса под узлом `location`.
-
-| Название      | Тип       | Описание |
-| --------      | ---       | -------- |
-| `destination` | string    | Уникальный идентификатор локации. Вернёт только те заказы, где данная локация - локация **получения** |
-| `dispatch`    | string    | Уникальный идентификатор локации. Вернёт только те заказы, где данная локация - локация **отправки** |
+| Name      | Type   | Description                                                  |
+|-----------|--------|--------------------------------------------------------------|
+| `created` | object | [Creation Date Filter structure](#get-filters-dates-created) |
 
 ***
 
-#### <a name="get-mode"/>Субструктура "Состояние заказа". Узел `params.mode`
+#### <a name="get-filters-dates-created"/>Creation Date Filter structure. The `params.filters.dates.created` node
 
-> Входит в [корневую структуру](#get-struct) данных запроса под узлом `mode`.
+> Part of the [Date Filter structure](#get-filters-dates) under the key `created`.
 
-Неуказание состояния подразумевает, что нас устраивают оба варианта состояния заказов, попадающих в результативную выборку.
-Указание `false` настаивает на том, чтобы заказы, **имеющие** данное состояние, были исключены из выборки. Указание `true`
-настаивает на том, чтобы заказы, **не имеющие** данное состояние, были исключены из выборки.
+| Name   | Type   | Description                                                                                                                                                              |
+|--------|--------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `from` | string | A string in `YYYY-MM-DD` format, responsible for the first date of the filtering range by the order creation date and until today, or the day specified in the `to` node |
+| `to`   | string | A string in `YYYY-MM-DD` format, responsible for the last date of the filtering range by order creation date                                                             |
 
-| Название      | Тип       | Описание |
-| --------      | ---       | -------- |
-| `isCanceled`  | boolean   | Должен ли заказ быть отменён для попадания в выборку |
-| `isGiven`     | boolean   | Должен ли заказ быть выдан для попадания в выборку |
-| `isPaid`      | boolean   | Должен ли быть оплачен заказ для попадания в выборку |
-| `isTaken`     | boolean   | Должен ли заказ быть уже принятым на терминале для попадания в выборку |
+***
+
+#### <a name="get-filters-location"/>Location Filter structure. The `params.filters.location` node
+
+> Part of the [Order Filter structure](#get-filters) under the key `location`.
+
+| Name          | Type   | Description                                                                                                            |
+|---------------|--------|------------------------------------------------------------------------------------------------------------------------|
+| `destination` | string | Unique location identifier. Request returns only those orders where specified location is the **destination** location |
+| `dispatch`    | string | Unique location identifier. Request returns only those orders where specified location is the **dispatch** location    |
+
+***
+
+#### <a name="get-mode"/>Order State structure. The `params.mode` node
+
+> Part of the [root structure](#get-struct) under the key `mode`.
+
+Not specifying the order state implies that you are satisfied with both options for the order state.
+Specifying `false` insists that orders **having** this state are **excluded** from the result selection.
+Specifying `true` insists that orders **not having** this state are **excluded** from the result selection.
+
+| Name         | Type    | Description                                                                                                         |
+|--------------|---------|---------------------------------------------------------------------------------------------------------------------|
+| `isCanceled` | boolean | An order has to be canceled (`true`) or not canceled (`false`) to be included in the results                        |
+| `isGiven`    | boolean | An order has to be given out (`true`) or not given out (`false`) to client to be included in the results            |
+| `isPaid`     | boolean | An order has to be payed (`true`) or not payed (`false`) to be included in the results                              |
+| `isTaken`    | boolean | An order has to be accepted (`true`) or not accepted (`false`) at a shipping terminal to be included in the results |
 
 ***
 
 
-### <a name="get-response"/>Данные ответа
+### <a name="get-response"/>Response data
 
-* [Пример ответа](#get-response-example)
-* [Описание данных ответа](#get-response-description)
+* [Example of a response](#get-response-example)
+* [Description of a response](#get-response-description)
 
-<a name="get-response-example"/>Пример ответа:
+<a name="get-response-example"/>Example of a response:
 
-```metadata json
+```javascript
 {
   "response": {
     "data": [
       {
-        "number": "600331378", // уникальный внутренний номер заказа
-        "id": "3a0421c4-aff4-11e6-80f4-00155d903d0c", // уникальный внутренний ID заказа
-        "status": "Заказ отменен", // статус заказа
+        "number": "600331378", // order number
+        "id": "3a0421c4-aff4-11e6-80f4-00155d903d0c", // unique order ID
+        "status": "Заказ отменен", // order state in plain text
         "dates": {
-          "create": "2016-11-21T17:10:24", // дата создания
-          "taken": "", // дата приёма на терминале
-          "shipped": "", // дата отправки груза на терминал получения
-          "arrived": "", // дата прибытия груза на терминал получения
-          "given": "" // дата выдачи груза клиенту
+          "create": "2016-11-21T17:10:24", // when order has been created (finalized)
+          "taken": "", // when cargo has been accepted at a shipping terminal
+          "shipped": "", // when cargo has been sent from a shipping terminal to a delivery terminal
+          "arrived": "", // when cargo has been delivered at a delivery terminal
+          "given": "" // when cargo has been given out to a client
         },
-        "basePrice": 1020, // базовая стоимость заказа (без скидок)
-        "price": 1020, // итоговая стоимость заказа (с учётом скидок)
-        "service": [ // массив услуг
+        "basePrice": 1020, // base order cost (no discounts)
+        "price": 1020, // total order cost (including discounts)
+        "service": [ // array of order services
           {
-            "name": "Перевозка между городами", // название услуги
-            "price": 190 // стоимость услуги (с учётом скидок)
+            "name": "Перевозка между городами", // name of the service
+            "price": 190 // cost of the service (including discounts)
           },
           {
             "name": "Забор груза от клиента",
@@ -228,58 +232,58 @@ xhttp.send(JSON.stringify(
           }
         ],
         "cargo": {
-          "dimension": { // объект габаритов груза. См. структура "Груз"
+          "dimension": { // object of cargo dimensions. See "cargo" structure
             "max": {
-              "height": 0.1, // макс. высота одного места
-              "length": 0.1, // макс. длина одного места
-              "weight": 0.1, // макс. вес одного места
-              "width": 0.1 // макс. ширина одного места
+              "height": 0.1, // max height of a collo
+              "length": 0.1, // max length of a collo
+              "weight": 0.1, // max weight of a collo
+              "width": 0.1 // max width of a collo
             },
-            "quantity": 1, // количество мест в заказе
-            "volume": 0.1, // общий объём всего груза
-            "weight": 0.9 // общий вес всего груза
+            "quantity": 1, // quantity of colli of the cargo
+            "volume": 0.1, // general volume of the cargo
+            "weight": 0.9 // general weight of the cargo
           }
         },
-        "customId": "", // здесь будет пользовательский ID, если указать при оформлении
-        "gateway": { // пункты доступа
-          "dispatch": { // пункт отправления
-            "point": { // точка доступа
-              "location": { // населённый пункт
-                "id": "e90f19de-0128-11e5-80c7-00155d903d03", // уникальный внутренний ID локации
-                "name": "Санкт-Петербург", // название локации
-                "type": "г" // тип локации
+        "customId": "", // your custom ID if you want to filter by it afterwards (any string)
+        "gateway": { // See "gateway" structure
+          "dispatch": { // pickup/shipping
+            "point": { 
+              "location": { 
+                "id": "e90f19de-0128-11e5-80c7-00155d903d03", // unique internal location ID
+                "name": "Санкт-Петербург", // location name
+                "type": "г" // location type (abbreviated)
               },
-              "address": "Пример ул., 1", // адрес
-              "date": "2016-11-22", // дата отправки
-              "time": { // время забора
-                "start": "09:00", // начало диапазона
-                "end": "14:00" // конец диапазона
+              "address": "Пример ул., 1", // address
+              "date": "2016-11-22", // date of the pickup
+              "time": { // time of the pickup
+                "start": "09:00", // start of the diapason
+                "end": "14:00" // end of the diapason
               }
             },
-            "customer": { // контрагент (отправитель)
-              "type": "individual", // физ. лицо
-              "name": "Арсеньев Сергей Денисович", // ФИО
-              "phone": [ // телефоны
+            "customer": { // contractor (shipper)
+              "type": "individual", // not a corporate
+              "name": "Арсеньев Сергей Денисович", // name, surname, patronym, if needed
+              "phone": [ // up to 3 phone numbers
                 "79111883409"
               ],
-              "email": "" // e-mail
+              "email": "" // e-mail (the more options for a contact the better)
             }
           },
-          "destination": { // пункт получения
-            "point": { // точка доступа
+          "destination": { // delivery/receiving point
+            "point": {
               "location": {
                 "id": "e90f1820-0128-11e5-80c7-00155d903d03",
                 "name": "Москва",
                 "type": "г"
               },
               "address": "Большой пр-т, 18",
-              "date": "2016-11-23",
-              "time": {
+              "date": "2016-11-23", // date of the delivery
+              "time": { // time of the delivery
                 "start": "14:00",
                 "end": "19:00"
               }
             },
-            "customer": { // контрагент (получатель)
+            "customer": { // contractor (receiver)
               "type": "individual",
               "name": "Арсеньева Светлана Дмитриевна",
               "phone": [
@@ -290,56 +294,60 @@ xhttp.send(JSON.stringify(
           }
         }
       }
-      // тут также могут быть другие заказы
+      // here can be more orders with the similar structure
     ],
-    "meta": { // meta-данные
-      "limit": 100, // ограничение количества заказов, выведенных на текуший запрос
-      "offset": 0, // смещение по массиву заказов, выведенных на текущий запрос
-      "total": 1 // всего заказов пользователя
+    "meta": { // meta data
+      "limit": 100, // limiting the number of orders returned
+      "offset": 0, // offset in the array of orders returned
+      "total": 1 // total count of orders satisfying the filtering conditions
     }
   }
 }
 ```
 
-<a name="get-response-description"/>Описание данных ответа:
+<a name="get-response-description"/>Description of a response:
 
-| Название      | Тип       | Описание |
-| --------      | ---       | -------- |
-| `basePrice`   | integer   | Базовая стоимость в рублях (без учёта скидок) |
-| `customId`    | string    | Пользовательский номер заказа, если был указан при оформлении |
-| [`dates`](../structure/dates.md) | object | Объект, содержащий даты изменения этапов заказа. См. [структуру "Даты изменения этапов заказа"](../structure/dates.md) |
-| `documentList` | array    | Список доступных документов. Ключом является код документа, значением &mdash; прямая ссылка на документ (эти ссылки можно передавать третьим лицам для использования, Ваш API-токен там не требуется). Полный список чуть ниже |
-| `cargo`.[`dimension`](../structure/cargo.md#dimension) | object | Объект габаритов груза. См. [структуру "Габариты"](../structure/cargo.md#dimension) |
-| `cargo`.`insurance` | integer | Заявленная стоимость страхования груза |
-| `cargo`.`insuranceNdv` | boolean | Страхование без объявленной стоимости |
-| `gateway`     | object    | Объект структуры ["Пункт доступа"](../structure/gateway.md), за исключением `service`, услуги возвращаются в корневом узле `service` (см. ниже) |
-| `id`          | string    | Уникальный внутренний ID заказа |
-| `number`      | integer   | Уникальный внутренний номер заказа |
-| `price`       | integer   | Итоговая стоимость в рублях (с учётом скидок) |
-| `service`<br/>- `name`</br>- `price` | array<br/>- string<br/>- integer | Массив услуг, с указанием наименования и стоимости (со скидкой)<br/>- Наименование услуги<br/>- Стоимость услуги со скидкой |
-| `status`<br/>- `code`<br/>- `message` | object<br/>- string<br/>- string | Объект, содержащий текущий статус заказа<br/>- код текущего статуса<br/>- сообщение текущего статуса |
+| Name                                                   | Type    | Description                                                                                                                                                                                                                                                |
+|--------------------------------------------------------|---------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `basePrice`                                            | integer | Basic cost of the order (excluding discounts)                                                                                                                                                                                                              |
+| `customId`                                             | string  | Custom order number, if specified during creation (finalization)                                                                                                                                                                                           |
+| [`dates`](../structure/dates.md)                       | object  | Object that contains dates for order stages. See [Dates of order stage changes](../structure/dates.md)                                                                                                                                                     |
+| `documentList`                                         | array   | List of available documents. The key is the document code, the value is the direct link to the document (these links can be transferred to third parties for use; your API token is not required there, keep it safe). The full list of documents is below |
+| `cargo`.[`dimension`](../structure/cargo.md#dimension) | object  | Cargo dimensions object. See [Cargo Dimension structure](../structure/cargo.md#dimension)                                                                                                                                                                  |
+| `cargo`.`insurance`                                    | integer | Declared cost of cargo insurance. The value is the cost and if it's set, this insurance considered selected                                                                                                                                                |
+| `cargo`.`insuranceNdv`                                 | boolean | Insurance with no declared value. `false` for turning it off, `true` by default                                                                                                                                                                            |
+| `gateway`                                              | object  | Object of the structure [Gateway](../structure/gateway.md), with the exception of the `service` node, services are returned in the root `service` node (see below)                                                                                         |
+| `id`                                                   | string  | Unique internal order ID                                                                                                                                                                                                                                   |
+| `number`                                               | integer | Order number                                                                                                                                                                                                                                               |
+| `price`                                                | integer | Total cost (including discounts)                                                                                                                                                                                                                           |
+| `service`                                              | array   | An array of services, indicating the name and cost (including discounts)                                                                                                                                                                                   |
+| `service[n].name`                                      | string  | Name of the service                                                                                                                                                                                                                                        |
+| `service[n].price`                                     | integer | Cost of the service (including discounts)                                                                                                                                                                                                                  |
+| `status`                                               | object  | Object that contains the current order state                                                                                                                                                                                                               |
+| `status.code`                                          | string  | Order state code                                                                                                                                                                                                                                           |
+| `status.message`                                       | string  | Order state description (plain text representation of the code)                                                                                                                                                                                            |
 
-Список документов:
+List of the documents:
 
-| Код | Описание |
-| --- | -------- |
-| `cargoPhoto` | Фото груза (архив) |
-| `cmr` | Международная транспортная накладная |
-| `doc` | Бланк заказа |
-| `invoice` | Счёт заказа |
-| `markingList` | Маркировочный лист |
-| `lrc` | Электронная экспедиторская расписка |
-| `scn` | Скан накладной на выдачу |
-| `ssd` | Сканы сопроводительных документов |
-| `utd` | Универсальный передаточный документ |
+| Code          | Description                                                                     |
+|---------------|---------------------------------------------------------------------------------|
+| `cargoPhoto`  | Cargo photo(s) (archive)                                                        |
+| `cmr`         | Cargo Movement Request, international waybill                                   |
+| `doc`         | Order form                                                                      |
+| `invoice`     | Order invoice                                                                   |
+| `markingList` | Marking sheet, labeling sheet                                                   |
+| `lrc`         | Lesser Receipt Certificate, online version of Forwarders Certificate of Receipt |
+| `scn`         | Scan of a consignation note (issue slip, delivery order)                        |
+| `ssd`         | Scans of accompanying documents                                                 |
+| `utd`         | Universal Transfer Document, integrated delivery note                           |
 
 
-### <a name="get-example-full"/>Примеры
+### <a name="get-example-full"/>Examples
 
-**Запрос**
+**Request**
 
 ```javascript
-// полный вызов в консоли на JavaScript см. в разделе Быстрый старт
+// full javascript code to use in web browser developer console, see in "Quick start" section
 xhttp.send(JSON.stringify(
 {
   "object": "order",
@@ -352,9 +360,9 @@ xhttp.send(JSON.stringify(
 }));
 ```
 
-**Ответ**
+**Response**
 
-```metadata json
+```javascript
 {
   "response": {
     "data": [
@@ -494,21 +502,16 @@ xhttp.send(JSON.stringify(
 ```
 
 
+## <a name="set"/>Creating (finalizing) or updating order. Action `set`
 
+### Request data
 
-
-
-
-## <a name="set"/>Отправка данных. Действие `set`
-
-### Данные запроса
-
-* [Общий пример структуры](#set-example)
-* [Корневая структура](#set-struct)
+* [Example of a structure](#set-example)
+* [Root structure](#set-struct)
 
 ***
 
-#### <a name="set-example"/>Общий пример структуры
+#### <a name="set-example"/>Example of a structure
 
 ```javascript
 // full javascript code to use in web browser developer console, see in "Quick start" section
@@ -518,124 +521,124 @@ xhttp.send(JSON.stringify(
   "action": "set",
   "params": {
     "cargo": {
-      "category": "12345678-1234-1234-1234-1234567890ab", // уникальный внутренний ID категории груза, необязателен
-      "correspondence": true, // перевозится ли корренспонденция
-      "dimension": { // габариты груза
-        "max": { // максимальные габариты одного места
-          "height": 0.5, // макс. высота одного места
-          "length": 0.5, // макс. длина одного места
-          "weight": 5.3, // макс. вес одного места
-          "width": 0.5 // макс. ширина одного места
+      "category": "12345678-1234-1234-1234-1234567890ab", // unique internal category ID, optional
+      "correspondence": true, // has correspondence been included (additional safe package with the documents)
+      "dimension": { // cargo dimensions
+        "max": { // maximum dimensions of a collo
+          "height": 0.5, // max height of a collo
+          "length": 0.5, // max length of a collo
+          "weight": 5.3, // max weight of a collo
+          "width": 0.5 // max width of a collo
         },
-        "quantity": 2, // количество мест
-        "volume": 0.9, // общий объём груза (всех мест)
-        "weight": 5.3 // общий вес груза (всех мест)
+        "quantity": 2, // quantity of colli of the cargo
+        "volume": 0.9, // general volume of the cargo
+        "weight": 5.3 // general weight of the cargo
       },
-      "insurance": 1000, // заявленная стоимость для страховки (если требуется)
-      "insuranceNdv": false, // если нужно отключить страхование БОС для плательщика физ.лица (также отключается автоматически при использовании "insurance")
-      "wrapping": { // упаковка
-        "bag1": 1, // 1 шт. упаковки с кодом `bag1`
-        "box1": 2, // 2 шт. упаковки с кодом `box1`
-        "palletCollar": 0.5 // 0.5м3 упаковки с кодом `palletCollar`
+      "insurance": 1000, // declared cost of cargo insurance (if needed, omit it otherwise)
+      "insuranceNdv": false, // if you need to turn off insurnace with no declared value (cost) for a payer which is individual customer (will be turned off automatically if you use standard insurance (the one with declared cost))
+      "wrapping": { // packaging the cargo
+        "bag1": 1, // 1 pc. of wrapping with the `bag1` code
+        "box1": 2, // 2 pcs. of wrapping with the `box1` code
+        "palletCollar": 0.5 // 0.5m^3 of volumetric wrapping with the `palletCollar` code
       }
     },
-    "customId": "MW0123456/ZX15", // пользовательский внешний ID. Может быть любимым. Необязателен
-    "gateway": { // пункт доступа
-      "dispatch": { // пункт отправки
-        "point": { // точка доступа
-          "location": "Санкт-Петербург", // локация отправки
-          "address": "Луначарского ул., 7", // адрес отправки
-          "date": "2017-05-01", // дата отправки
-          "time": { // диапазон времени для забора груза
+    "customId": "MW0123456/ZX15", // custom user ID, defined by you. Optional
+    "gateway": { // settings of shipping and receiving
+      "dispatch": { // pickup/shipping
+        "point": {
+          "location": "Санкт-Петербург", // dispatch location
+          "address": "Луначарского ул., 7", // dispatch address
+          "date": "2017-05-01", // date of the pickup
+          "time": { // datetime diapason for the pickup
             "start": "14:00",
             "end": "18:00"
           }
         },
-        "service": { // услуги
-          "needLoading": { // погрузочные работы
-            "floor": 21, // 21 этаж
-            "hasLift": true // имеется грузовой лифт
+        "service": { // services you want to use in the order
+          "needLoading": { // loading service
+            "floor": 21, // 21st floor
+            "hasLift": true // there's cargo elevator (lift) in the building
           },
-          "specificLoading": [ // особый вид транспорта
-            "openMachine" // открытая машина
+          "specificLoading": [ // specific type transport
+            "openMachine" // The client is provided with a vehicle with an open body (only sides, no awning)
           ],
-          "retrieveAD": { // возврат сопроводительных документов, также этот узел является точкой доступа
-            "location": "Выборг", // локации доставки СД
-            "address": "Просвещения пр-т" // адрес доставки СД
+          "retrieveAD": { // return accompanying documents, note that this node is also a `point` node
+            "location": "Выборг", // location to deliver documents to
+            "address": "Просвещения пр-т" // address to deliver documents to
           }
         },
-        "customer": { // контрагент (отпавитель)
-          "email": "customer@ya.ru", // email
-          "id": "ivan", // временный ID для текущего запроса. Необязательный. По умолчанию `dispatch`
-          "type": "individual", // физ. лицо
-          "name": "Иванов Иван Иванович", // ФИО
-          "phone": "79999999999" // телефон
+        "customer": { // customer (shipper)
+          "email": "customer@ya.ru", // e-mail
+          "id": "ivan", // temporary ID for this request. Optional. `dispatch` by default
+          "type": "individual", // not a corporate customer
+          "name": "Иванов Иван Иванович", // surname, name, patronym
+          "phone": "79999999999" // phone number for a contact
         }
       },
-      "destination": { // пункт получения
-        "point": { // точка доступа
-          "location": "Москва", // локация получения
-          "terminal": "1c9871-e09d-df43423-1234-123456", // уникальный внутренний ID терминала
-          "date": "2017-05-08" // дата получения
+      "destination": { // delivery
+        "point": {
+          "location": "Москва", // delivery location
+          "terminal": "1c9871-e09d-df43423-1234-123456", // unique internal terminal ID
+          "date": "2017-05-08" // delivery date
         },
-        "service": { // услуги
-          "needLoading": { // разгрузочные работы
-            "used": false // не требуются
+        "service": { // services
+          "needLoading": { // offloading (won't be used for a delivery terminal, so it's here for an example)
+            "used": false // do not include this service
           },
-          "specificLoading": [ // особый вид транспорта
+          "specificLoading": [ // specific type transport
             "tailLift"
           ]
         },
-        "customer": { // контрагент (получатель)
-          "type": "corporation", // юр. лицо
-          "companyName": "АЛЬЯНС", // название юр. лица
-          "name": "Ivanov Ilya", // ФИО контактного лица
-          "phone": [ // список телефонов
+        "customer": { // customer (receiver)
+          "type": "corporation", // corporate customer
+          "companyName": "АЛЬЯНС", // company name
+          "name": "Ivanov Ilya", // name, surname of a contact person
+          "phone": [ // phone numbers' list
             "79999999999",
             "79998888888"
           ],
-          "kpp": "111111111", // КПП
-          "inn": "222222222222" // ИНН
+          "kpp": "111111111", // reason code
+          "inn": "222222222222" // tax ID
         }
       }
     },
-    "payer": "ivan", // указывает плательщиком отправителя (по временному ID). Можно не указывать, плательщик по умолчанию - получатель
-    "promoCode": "promo" // промокод, если имеется
+    "payer": "ivan", // sets the dispatch customer as payer (by temporary ID). Can be omitted if payer is a receiver customer
+    "promoCode": "promo" // promo code, if available
   }
 }));
 ```
 
-#### <a name="get-struct"/>Корневая структура. Передаётся напрямую в узел `params`
+#### <a name="get-struct"/>Root structure. Passed directly into the `params` node
 
-| Структура         | Тип       | Описание |
-| ---------         | ---       | -------- |
-| **Обязательные**
-| `cargo`           | object    | [Структура "Груз"](../structure/cargo.md) _(на другой странице)_ |
-| `gateway`         | object    | [Структура "Пункт доступа"](../structure/gateway.md) _(на другой странице)_ |
-| `payer`           | string\|object | Строка с временным ID, указанным (или не указанным) у контрагентов в структуре "Пункт доступа". По умолчанию имеет значение `destination`, т.е. получатель - плательщик (если Вы хотите назначить плательщиком получателя, без ввода своего ID, укажите `destination`). **Также может быть третьим лицом**, тогда его содержимое должно соответствовать [структуре "Контрагент"](../structure/customer.md) _(на другой странице)_|
-| **Необязательные**
-| `cod`             | object    | [Структура "Наложенный платёж"](../structure/cod.md) _(на другой странице)_ |
-| `customId`        | string    | Строка с Вашим ID для заказа. По ней впоследствии можно будет получить данные заказа. Необязательный параметр, каждый заказ в любом случае имеет уникальный внутренний номер и уникальный внутренний ID |
-| `promoCode`       | string    | Промокод, если имеется. Необязательный параметр
+| Structure      | Type           | Description                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+|----------------|----------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Required**   |   
+| `cargo`        | object         | ["Cargo" structure](../structure/cargo.md) _(on another page)_                                                                                                                                                                                                                                                                                                                                                                                   |
+| `gateway`      | object         | ["Gateway" structure](../structure/gateway.md) _(on another page)_                                                                                                                                                                                                                                                                                                                                                                               |
+| `payer`        | string\|object | String with a temporary ID specified (or not specified) for counterparties in the "Gateway" structure. The default value is `destination`, that means receiver of the cargo is the payer (for example, if you want set receiver as the payer without temporary ID, set it to `destination`). **Can also be a third party**, then contents of this node must be an instance of [Customer structure](../structure/customer.md) _(on another page)_ |
+| **Optional**   | 
+| `cod`          | object         | [Cash-on-delivery structure](../structure/cod.md) _(on another page)_                                                                                                                                                                                                                                                                                                                                                                            |
+| `customId`     | string         | Order ID, defined by user. Ypu can use it in the filters to get this order. Optional. In any case each order has a unique public order number and a unique internal ID                                                                                                                                                                                                                                                                           |
+| `promoCode`    | string         | Promo code, if available. Optional                                                                                                                                                                                                                                                                                                                                                                                                               |
 
-### <a name="get-response"/>Данные ответа
+### <a name="get-response"/>Response data
 
-* [Пример ответа](#set-response-example)
-* [Описание данных ответа](#set-response-description)
+* [Example of a response](#set-response-example)
+* [Description of a response](#set-response-description)
 
-<a name="set-response-example"/>Пример ответа:
+<a name="set-response-example"/>Example of a response
 
 ```javascript
 {
   "response": {
-    "id": "3afda4a6-46cf-11e7-80f9-00155d189b14", // уникальный внутрениий ID заказа
-    "number": "700247223", // уникальный внутренний номер заказа
-    "basePrice": 2440, // базовая стоимость заказа (без скидок)
-    "price": 2440, // итоговая стоимость заказа (со скидками)
-    "service": [ // услуги
+    "id": "3afda4a6-46cf-11e7-80f9-00155d189b14", // unique internal order ID
+    "number": "700247223", // order number
+    "basePrice": 2440, // base cost of the order (excluding discounts)
+    "price": 2440, // total cost of the order (including discounts)
+    "service": [
       {
-        "name": "Перевозка между городами", // наименование услуги
-        "price": 495 // стоимость услуги со скидкой
+        "name": "Перевозка между городами", // name of the service
+        "price": 495 // cost of the service (including discounts)
       },
       {
         "name": "Жесткий короб",
@@ -662,22 +665,24 @@ xhttp.send(JSON.stringify(
 }
 ```
 
-<a name="set-response-description"/>Описание данных ответа:
+<a name="set-response-description"/>Description of a response
 
-| Название      | Тип       | Описание |
-| --------      | ---       | -------- |
-| id            | string    | Уникальный внутренний ID заказа |
-| number        | string    | Уникальный внутренний номер заказа |
-| basePrice     | integer   | Базовая стоимость в рублях (без учёта скидок) |
-| price         | integer   | Итоговая стоимость в рублях (с учётом скидок) |
-| service<br/>- name</br>- price | array<br/>- string<br/>- integer | Массив услуг, с указанием наименования и стоимости (со скидкой)<br/>- Наименование услуги<br/>- Стоимость услуги со скидкой |
+| Name             | Type    | Description                                                              |
+|------------------|---------|--------------------------------------------------------------------------|
+| id               | string  | Unique internal order ID                                                 |
+| number           | integer | Order number                                                             |
+| basePrice        | integer | Basic cost of the order (excluding discounts)                            |
+| price            | integer | Total cost of the order (including discounts)                            |
+| service          | array   | An array of services, indicating the name and cost (including discounts) |
+| service[n].name  | string  | Name of the service                                                      |
+| service[n].price | integer | Cost of the service (including discounts)                                |
 
-### <a name="set-example-full"/>Примеры
+### <a name="set-example-full"/>Examples
 
-**Запрос**
+**Request**
 
 ```javascript
-// полный вызов в консоли на JavaScript см. в разделе Быстрый старт
+// full javascript code to use in web browser developer console, see in "Quick start" section
 xhttp.send(JSON.stringify(
 {
   "object": "order",
@@ -731,19 +736,19 @@ xhttp.send(JSON.stringify(
 }));
 ```
 
-**Ответ**
+**Response**
 
 ```javascript
 {
   "response": {
-    "id": "3afda4a6-46cf-11e7-80f9-00155d189b14", // уникальный внутрениий ID заказа
-    "number": "700247223", // уникальный внутренний номер заказа
-    "basePrice": 2440, // базовая стоимость заказа (без скидок)
-    "price": 2440, // итоговая стоимость заказа (со скидками)
-    "service": [ // услуги
+    "id": "3afda4a6-46cf-11e7-80f9-00155d189b14", // unique internal order ID
+    "number": "700247223", // order number
+    "basePrice": 2440, // base cost of the order
+    "price": 2440, // total cost of the order
+    "service": [
       {
-        "name": "Перевозка между городами", // наименование услуги
-        "price": 495 // стоимость услуги со скидкой
+        "name": "Перевозка между городами", // name of the service
+        "price": 495 // cost of the service
       },
       {
         "name": "Жесткий короб",
@@ -770,11 +775,11 @@ xhttp.send(JSON.stringify(
 }
 ```
 
-## <a name="cancel"/>Отмена заказа
+## <a name="cancel"/>Canceling an order
 
-Представляет собой объект, использующийся для отмены оформленного заказа.
+Represents an object used to cancel a placed order.
 
-**Запрос**
+**Request**
 
 ```javascript
 // full javascript code to use in web browser developer console, see in "Quick start" section
@@ -783,18 +788,18 @@ xhttp.send(JSON.stringify(
   "object": "order",
   "action": "cancel",
   "params": {
-    "id": "3afda4a6-46cf-11e7-80f9-00155d189b14", // уникальный внутрениий ID заказа
-    "reason": "Тестовый заказ. Проверяли работоспособность" // текстовое описание причины отмены заказа
+    "id": "3afda4a6-46cf-11e7-80f9-00155d189b14", // unique internal order ID
+    "reason": "Тестовый заказ. Проверяли работоспособность" // reason of canceling an order in free form
   }
 }));
 ```
 
-**Ответ**
+**Response**
 
 ```javascript
 {
   "response": {
-    "message": "Заказ успешно отменён" // Если ошибка, здесь будет объект ошибки
+    "message": "Заказ успешно отменён" // if error occured, there will be an error object
   }
 }
 ```
