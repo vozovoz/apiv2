@@ -37,7 +37,7 @@ certain structures with a defined key, that this structure is assigned to.
 > In this request every structure is **_optional_**, that is, it can be omitted.
 
 
-#### <a name="get-example"/>Общий пример структуры
+#### <a name="get-example"/>General example of the structure
 
 ```javascript
 // full javascript code to use in web browser developer console, see in "Quick start" section
@@ -46,53 +46,53 @@ xhttp.send(JSON.stringify(
   "object": "terminal",
      "action": "get",
      "params": {
-       "location": "Санкт-Петербург", // отобрать по локации, также может быть использован уникальный ID локации
-       // или
-       // "terminal": "12345678-1234-1234-1234-1234567890ab", // уникальный ID самого терминала
-       "limit": 10, // ограничение количества записей в ответе
-       "offset": 10 // смещение по количеству записей в ответе
+       "location": "Санкт-Петербург", // filter by location, a unique location ID can also be used
+       // or
+       // "terminal": "12345678-1234-1234-1234-1234567890ab", // unique internal terminal ID
+       "limit": 10, // limiting the number of entries in the response
+       "offset": 10 // offset by the number of entries in the response
      }
 }))
 ```
 
-#### <a name="get-struct"/>Корневая структура. Передаётся напрямую в узел `params`
+#### <a name="get-struct"/>Root structure. Passed directly into the `params` node
 
-| Структура     | Тип       | Описание |
-| ---------     | ---       | -------- |
-| `limit`       | integer   | Ограничение количества записей в ответе |
-| `location`    | string    | Может быть как строкой запроса локации, так и внутренним уникальным ID локации |
-| `offset`      | integer   | Смешение по количеству записей в ответе |
-| `terminal`    | string    | Внутренний уникальный ID запрашиваемого терминала |
+| Structure  | Type    | Description                                                             |
+|------------|---------|-------------------------------------------------------------------------|
+| `limit`    | integer | Limiting the number of entries in a response                            |
+| `location` | string  | Can be either a location query string or an internal unique location ID |
+| `offset`   | integer | Offset by number of records in response                                 |
+| `terminal` | string  | Internal unique ID of the requested terminal                            |
 
->Вы можете использовать:
->* узел `location` для получения терминалов по локации;
->* узел `terminal` для получения данных по терминалу;
->* только узлы `limit` и `offset` для перебора всех терминалов.
+>You can use the following:
+>* `location` node for getting terminals by location;
+>* `terminal` node to receive terminal data;
+>* only `limit` and `offset` nodes to iterate over all terminals.
 
 
-### <a name="get-response"/>Данные ответа
+### <a name="get-response"/>Response data
 
-* [Пример ответа](#get-response-example)
-* [Описание данных ответа](#get-response-description)
+* [Example of a response](#get-response-example)
+* [Description of a response](#get-response-description)
 
-<a name="get-response-example"/>Пример ответа:
+<a name="get-response-example"/>Example of a response
 
 ```javascript
 {
   "response": {
     "data": [
       {
-          "guid": "f6809ac0-9153-11e8-811d-00155d903d0c", // уникальный внутренний ID терминала
-          "location_guid": "e90f1820-0128-11e5-80c7-00155d903d03", // уникальный внутренний ID локации
-          "coordinates": { // координаты
-              "latitude": "55.91741", // ширина
-              "longitude": "37.56931" // долгота
+          "guid": "f6809ac0-9153-11e8-811d-00155d903d0c", // unique internal terminal ID
+          "location_guid": "e90f1820-0128-11e5-80c7-00155d903d03", // unique internal location ID
+          "coordinates": { // coordinates
+              "latitude": "55.91741",
+              "longitude": "37.56931"
           },
-          "name": "МКАД 84-ый км, вл.3А, стр.3", // название\короткий адрес
-          "address": "Москва, МКАД 84-й км, вл.3А, стр.3", // полный адрес
-          "note": "ТПЗ \"Алтуфьево\", платный въезд-80руб., тел.склада:+7-985-464-45-73", // заметки
-          "location_country": "RU", // страна
-          "location_name": "Москва г" // город
+          "name": "МКАД 84-ый км, вл.3А, стр.3", // name (short address)
+          "address": "Москва, МКАД 84-й км, вл.3А, стр.3", // full address
+          "note": "ТПЗ \"Алтуфьево\", платный въезд-80руб., тел.склада:+7-985-464-45-73", // additional info
+          "location_country": "RU", // country
+          "location_name": "Москва г" // location
       },
       {
           "guid": "a9c91404-5456-11e9-bb9f-00155df27330",
@@ -107,27 +107,27 @@ xhttp.send(JSON.stringify(
           "location_country": "RU",
           "location_name": "Москва г"
       }
-      // кол-во терминалов зависит от их количества по указанному запросу и узла `limit`
+      // the number of terminals depends on their number for the specified request and the `limit` node
     ],
-    "meta": { // meta-данные
-      "limit": 10, // заданное ограничение
-      "offset": 10, // заданное смещение
-      "total": 285 // общее количество записей
+    "meta": { // meta data
+      "limit": 10, // specified limit
+      "offset": 10, // specified offset
+      "total": 285 // total count of the records returned
     }
   }
 }
 ```
 
-<a name="get-response-description"/>Описание данных ответа:
+<a name="get-response-description"/>Description of a response:
 
-| Название      | Тип       | Описание |
-| --------      | ---       | -------- |
-| `address`     | string    | Адрес терминала |
-| `guid`        | string    | Уникальный внутренний ID терминала |
-| `location_guid` | string  | УНикальный внутренний ID локации |
-| `location_name` | string  | Название локации |
-| `name`        | string    | Наименование терминала |
-| `note`        | string    | Заметки по терминалу для клиентов |
+| Name            | Type   | Description                                   |
+|-----------------|--------|-----------------------------------------------|
+| `address`       | string | Terminal address                              |
+| `guid`          | string | Unique internal terminal ID                   |
+| `location_guid` | string | Unique internal location ID                   |
+| `location_name` | string | Location name                                 |
+| `name`          | string | Terminal name (usually, it's a short address) |
+| `note`          | string | Notes on the terminal for clients             |
 
 ***
 [▲ Up](#up)
