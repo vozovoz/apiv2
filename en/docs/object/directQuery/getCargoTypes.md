@@ -1,19 +1,19 @@
 # <a name="up"/>Vozovoz API 2.5
 
-[Main page](/en/README.md) > [Objects](../index.md) > [Прямой запрос](../directQuery.md) > Категории груза
+[Main page](/en/README.md) > [Objects](../index.md) > [Прямой запрос](../directQuery.md) > Cargo types
 
 > **Object code: `directQuery`**
-> **Код метода: `getCargoTypes`**
+> **Method code: `getCargoTypes`**
 
 
 ## Contents
 
-* [Примеры](#example)
-* [Описание](#description)
+* [Example](#example)
+* [Description](#description)
 
-## <a name="example"/>Примеры
+## <a name="example"/>Example
 
-**Запрос**
+**Request**
 ```javascript
 // full javascript code to use in web browser developer console, see in "Quick start" section
 xhttp.send(JSON.stringify(
@@ -30,24 +30,24 @@ xhttp.send(JSON.stringify(
 }));
 ```
 
-<a name="response-example"/>**Ответ**
+<a name="response-example"/>**Response**
 
 ```javascript
 {
   "response": {
-    "data": [ // массив результатов
+    "data": [ // result array
       {
-        "id": "f1965e6a-13ea-11e4-826b-d850e6bbb0fc", // уникальный внутренний ID категории (именно он используется в оформлении заказа)
-        "name": "Автозапчасти кузовные", // наименование категории
-        "sortIndex": 0, // сортировочный индекс
-        "category": { // родительская категория
-          "id": "04776e4f-8e19-11e5-80d2-00155d903d03", // уникальный внутренний ID категории (в оформлении заказа можно использовать и этот ID)
-          "name": "Авто-мото-вело техника" // наименование категории
+        "id": "f1965e6a-13ea-11e4-826b-d850e6bbb0fc", // unique internal category ID (it's used when placing an order)
+        "name": "Автозапчасти кузовные", // name of the category
+        "sortIndex": 0, // sorting index
+        "category": { // parent category data
+          "id": "04776e4f-8e19-11e5-80d2-00155d903d03", // unique internal category ID (you can also use this ID when placing an order)
+          "name": "Авто-мото-вело техника" // name of the category
         },
-        "restrictions": { // ограничения категории
-          "declaredCost": { // объявленная стоимость (страховка)
-            "min": 0, // минимальная объявленная стоимость
-            "max": 30000000 // максимальная объявленная стоимость
+        "restrictions": { // restrictions of the category
+          "declaredCost": { // declared cost (for insurance)
+            "min": 0, // minimum declared value
+            "max": 30000000 // maximum declared value
           }
         }
       },
@@ -101,7 +101,7 @@ xhttp.send(JSON.stringify(
         "name": "Выставочное оборудование",
         "sortIndex": 0,
         "category": {
-          "id": "00000000-0000-0000-0000-000000000000", // родительская категория отсутствует
+          "id": "00000000-0000-0000-0000-000000000000", // parent category is absent
           "name": null
         },
         "restrictions": {
@@ -112,38 +112,38 @@ xhttp.send(JSON.stringify(
         }
       }
     ],
-    "meta": { // meta-данные
-      "limit": 5, // заданный лимит
-      "offset": 0, // заданное смещение
-      "total": 73 // всего категорий
+    "meta": { // meta data
+      "limit": 5, // specified limit
+      "offset": 0, // specified offset
+      "total": 73 // total count of entries returned
     }
   }
 }
 ```
 
 
-## <a name="description"/>Описание
-Объект [прямого запроса](../directQuery.md) с использованием метода `getCargoTypes` возвращает список
-имеющихся категорий груза.
+## <a name="description"/>Descripton
+
+The [direct query](../directQuery.md) object using `getCargoTypes` method returns the list of cargo categories.
 
 
-### Данные запроса
+### Request data
 
-| Структура     | Тип | Описание |
-| ---------     | --- | -------- |
-| Обязательные
-| `method`      | string | Название метода, которое необходимо выполнить. Должен быть `getCargoTypes` |
-| Необязательные
-| `data`        | object | Данные, необходимые для работы вызываемого метода. Необязательный узел |
+| Structures | Type   | Description                                                              |
+|------------|--------|--------------------------------------------------------------------------|
+| Required   |   
+| `method`   | string | The name of the method to call. Should be `getCargoTypes`                |
+| Optional   | 
+| `data`     | object | Data required for the called method to operate. Optional for this method |
 
->Узел `data` может содержать:
->* `limit` (целое положительное число) - ограничение возвращаемых записей
->* `offset` (целое положительное число) - смещение по возвращаемым записям
+>The `data` node may contain:
+>* `limit` (positive integer) - limit of entries returned
+>* `offset` (positive integer) - offset for number of entries returned
 
 
-### Данные ответа
+### Response data
 
-> Данные ответа описаны в виде комментариев в [примере выше](#response-example).
+>The response data is described as comments in [example above](#response-example).
 
 
 ***

@@ -1,9 +1,9 @@
 # <a name="up"/>Vozovoz API 2.5
 
-[Main page](/en/README.md) > [Objects](../index.md) > [Direct query](../directQuery.md) > Расписание дат получения груза
+[Main page](/en/README.md) > [Objects](../index.md) > [Direct query](../directQuery.md) > Schedule of dates for receiving cargo
 
 > **Object code: `directQuery`**<br/>
-**Method code: `getArrivalTimetable`**
+> **Method code: `getArrivalTimetable`**
 
 
 ## Contents
@@ -11,7 +11,7 @@
 * [Example](#example)
 * [Description](#description)
 
-## <a name="example"/>Примеры
+## <a name="example"/>Example
 
 **Request**
 ```javascript
@@ -23,18 +23,18 @@ xhttp.send(JSON.stringify(
   "params": {
     "method": "getArrivalTimetable",
     "data": {
-      "from": { // пункт отправки
-        "locationId": "f2a30387-0124-11e5-80c7-00155d903d03", // уникальный внутренний ID локации, если от адреса
-        // или
-        // "terminalId": "99999894-3673-11e5-80cd-00155d903d03", // если от терминала
-        "dates": { // объект даты обязателен, если от адреса
-          "to": "2017-06-06T18:00:00Z" // нижняя граница даты и времени отправки
+      "from": { // shipping point (dispatch)
+        "locationId": "f2a30387-0124-11e5-80c7-00155d903d03", // unique internal location ID (if dispatch is address)
+        // or
+        // "terminalId": "99999894-3673-11e5-80cd-00155d903d03", // if dispatch is terminal
+        "dates": { // this `dates` object required, it dispatch is address
+          "to": "2017-06-06T18:00:00Z" // shipping datetime lower bound
         }
       },
-      "to": { // пункт получения
-        "locationId": "e90f1820-0128-11e5-80c7-00155d903d03" // уникальный внутренний ID локации, если до адреса
-        // или
-        // "terminalId": "30b8e091-3c6b-11e6-80e9-00155d903d0a" // если до терминала
+      "to": { // delivery point (destination)
+        "locationId": "e90f1820-0128-11e5-80c7-00155d903d03" // unique internal location ID (if destination is address)
+        // or
+        // "terminalId": "30b8e091-3c6b-11e6-80e9-00155d903d0a" // if destination is terminal
       }
     }
   }
@@ -45,14 +45,14 @@ xhttp.send(JSON.stringify(
 
 ```javascript
 {
-  /* если от адреса до адреса */
+  /* if it's `address-to-address` */
   "response": {
-    "locationId": "e90f1820-0128-11e5-80c7-00155d903d03",
+    "locationId": "e90f1820-0128-11e5-80c7-00155d903d03", // delivery to address (location ID)
     "dates": [
       {
-        "from": "2017-06-08T14:00:00Z", // верхняя граница диапазона доставки
-        "to": "2017-06-08T19:00:00Z", // нижняя граница диапазона доставки
-        "courierArrivalTimeMinInterval": 5 // минимальный интервал диапазона
+        "from": "2017-06-08T14:00:00Z", // delivery datetime upper bound of diapason (start of the period)
+        "to": "2017-06-08T19:00:00Z", // delivery datetime lower bound of diapason (end of the period)
+        "courierArrivalTimeMinInterval": 5 // minimum range interval (in hours)
       },
       {
         "from": "2017-06-09T09:00:00Z",
@@ -61,13 +61,13 @@ xhttp.send(JSON.stringify(
       }
     ]
   }
-  /* если от адреса до терминала */
+  /* if it's `address-to-terminal` */
   "response": {
-    "terminalId": "30b8e091-3c6b-11e6-80e9-00155d903d0a",
+    "terminalId": "30b8e091-3c6b-11e6-80e9-00155d903d0a", // delivery to terminal (terminal ID)
     "dates": [
       {
-        "from": "2017-06-08T14:00:00Z", // верхняя граница диапазона доставки
-        "to": "2017-06-08T23:59:00Z" // нижняя граница диапазона доставки
+        "from": "2017-06-08T14:00:00Z", // delivery datetime (start of the period)
+        "to": "2017-06-08T23:59:00Z" // lower bound (depending on working hours of a terminal), though "23:59" means it's 24 hours open
       },
       {
         "from": "2017-06-09T00:01:00Z",
@@ -79,13 +79,13 @@ xhttp.send(JSON.stringify(
       }
     ]
   }
-  /* если от терминала до терминала */
+  /* it it's `terminal-to-terminal` */
   "response": {
-    "terminalId": "30b8e091-3c6b-11e6-80e9-00155d903d0a",
+    "terminalId": "30b8e091-3c6b-11e6-80e9-00155d903d0a",  // delivery to terminal (terminal ID)
     "dates": [
       {
-        "from": "2017-06-07T14:00:00Z",
-        "to": "2017-06-07T23:59:00Z"
+        "from": "2017-06-07T14:00:00Z", // delivery datetime (start of the period)
+        "to": "2017-06-07T23:59:00Z" // lower bound (depending on working hours of a terminal), though "23:59" means it's 24 hours open
       },
       {
         "from": "2017-06-08T00:01:00Z",
@@ -97,14 +97,14 @@ xhttp.send(JSON.stringify(
       }
     ]
   }
-  /* если от терминала до адреса */
+  /* if it's `terminal-to-address` */
   "response": {
-    "locationId": "e90f1820-0128-11e5-80c7-00155d903d03",
+    "locationId": "e90f1820-0128-11e5-80c7-00155d903d03", // delivery is to address (location ID)
     "dates": [
       {
-        "from": "2017-06-07T14:00:00Z",
-        "to": "2017-06-07T19:00:00Z",
-        "courierArrivalTimeMinInterval": 5
+        "from": "2017-06-07T14:00:00Z", // delivery datetime upper bound of diapason (start of the period)
+        "to": "2017-06-07T19:00:00Z", // delivery datetime lower bound of diapason (end of the period)
+        "courierArrivalTimeMinInterval": 5 // minimum range interval (in hours)
       },
       {
         "from": "2017-06-08T09:00:00Z",
@@ -123,34 +123,32 @@ xhttp.send(JSON.stringify(
 
 
 ## <a name="description"/>Description
-Объект [прямого запроса](../directQuery.md) с использованием метода `getArrivalTimetable` возвращает расписание
-доступных дат доставки груза.
+The [direct query](../directQuery.md) object using `getArrivalTimetable` method returns the schedule of available delivery dates.
 
 
-### Данные запроса
+### Request data
 
-| Структура     | Тип | Описание |
-| ---------     | --- | -------- |
-| Обязательные
-| `method`      | string | Название метода, которое необходимо выполнить. Должен быть `getArrivalTimetable` |
-| Необязательные
-| `data`        | object | Данные, необходимые для работы вызываемого метода. См. ниже |
+| Structure  | Type   | Description                                                     |
+|------------|--------|-----------------------------------------------------------------|
+| Required   |   
+| `method`   | string | The name of the method to call. Should be `getArrivalTimetable` |
+| Optional   |
+| `data`     | object | Data required for the called method to operate. See below       |
 
->Узел `data` должен содержать:
->* `from` (объект) - пункт отправки
->* `to` (объект) - пункт доставки
+>The `data` node must contain:
+>* `from` (object) - dispatch point
+>* `to` (object) - destination point
 >
->Каждый из этих узлов может содержать:
->* `locationId` (строка) - уникальный внутренний ID населённого пункта (локации)
->или
->* `terminalId` (строка) - уникальный внутренний ID терминала
->а также узел `from` может содержать:
->* `dates` (объект) с узлом `to` - нижняя граница диапазона отправки. Обязателен, если отправка от адреса
+>Each of these nodes may contain:
+>* `locationId` (string) - unique internal location ID<br/>or
+>* `terminalId` (string) - unique internal terminal ID<br/>
+>and also `from` node may contain:
+>* `dates` (object) with `to` node - lower limit of a shipping time range. Mandatory if dispatch is address
 
 
 ### Response data
 
-> Данные ответа описаны в виде комментариев в [примере выше](#response-example).
+>The response data is described as comments in [example above](#response-example).
 
 
 ***

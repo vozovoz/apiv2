@@ -1,6 +1,6 @@
 # <a name="up"/>Vozovoz API 2.5
 
-[Main page](/en/README.md) > [Objects](index.md) > Cost of an order
+[Main page](/en/README.md) > [Objects](index.md) > Cost of the order
 
 
 > **Object code: `price`**
