@@ -1,6 +1,6 @@
 # <a name="up"/>Vozovoz API 2.5
 
-[Main page](/en/README.md) > [Objects](../index.md) > [Прямой запрос](../directQuery.md) > Cargo types
+[Main page](/en/README.md) > [Objects](../index.md) > [Direct query](../directQuery.md) > Cargo categories
 
 > **Object code: `directQuery`**<br/>
 > **Method code: `getCargoTypes`**

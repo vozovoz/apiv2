@@ -1,6 +1,6 @@
 # <a name="up"/>Vozovoz API 2.5
 
-[Main page](/en/README.md) > [Objects](../index.md) > [Прямой запрос](../directQuery.md) > Schedule of dates for shipping cargo
+[Main page](/en/README.md) > [Objects](../index.md) > [Direct query](../directQuery.md) > Schedule of dates for shipping cargo
 
 > **Object code: `directQuery`**<br/>
 > **Method code: `getDepartureTimetable`**
