@@ -12,7 +12,7 @@
 * Available methods:
     * [Available dates for shipping cargo](directQuery/getDepartureTimetable.md) `getDepartureTimetable`
     * [Available dates for receiving cargo](directQuery/getArrivalTimetable.md) `getArrivalTimetable`
-    * [Get list of cargo types](directQuery/getCargoTypes.md) `getCargoTypes`
+    * [List of cargo categories](directQuery/getCargoTypes.md) `getCargoTypes`
 
 
 ## <a name="example"/>Examples
