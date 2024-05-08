@@ -9,11 +9,11 @@
 
 * [Description](#description)
 * [Getting data. Action `get`](#get)
-    * [Общий пример структуры](#get-example)
-    * [Подробное описание структуры](#get-struct)
-    * [Данные ответа](#get-response)
-        * [Пример ответа "адрес-адрес"](#get-response-example-addr-addr)
-        * [Пример ответа "терминал-терминал"](#get-response-example-term-term)
+    * [Example of the structure](#get-example)
+    * [Description of the structure](#get-struct)
+    * [Response data](#get-response)
+        * [Example of an "address-to-address" response](#get-response-example-addr-addr)
+        * [Example fo a "terminal-to-terminal" response](#get-response-example-term-term)
 
 
 ## <a name="description"/>Description
@@ -34,11 +34,11 @@ certain structures with a defined key, that this structure is assigned to.
 
 ### <a name="get-get"/>Request data
 
-> Узел `date` в объекте `dispatch` является необязательным параметром, однако
-может в несколько раз сократить время обработки запроса. Учтите также, что передача в запросе
-уникальных ID локации\терминала также ускоряет время ответа.
+>The `date` node in the `dispatch` object is an optional parameter,
+but can speed up the request processing by several times.
+Please also note that sending unique location\terminal IDs in the request also reduces time to get the response.
 
-#### <a name="get-example"/>Общий пример структуры
+#### <a name="get-example"/>Example of the structure
 
 ```javascript
 // full javascript code to use in web browser developer console, see in "Quick start" section
@@ -48,66 +48,66 @@ xhttp.send(JSON.stringify(
      "action": "get",
      "params": {
 
-       // адрес отправки (в свободной форме) или уникальный ID локации
+       // pickup/shipping address (in free form) or unique internal location ID
        "dispatch": {"address": "Санкт-Петербург"},
-       // или уникальный ID терминала отправки
+       // or unique internal terminal ID
        // "dispatch": {"terminal": "12345678-1234-1234-1234-1234567890ab"},
 
-       // адрес доставки (в свободной форме) или уникальный ID локации
+       // delivery address (in free form) or unique internal location ID
        "destination": {"address" : "мск, ленинский"}
-       // или терминал доставки (да, терминал тоже может быть указан простым текстом)
+       // or delivery terminal (and yes, the terminal can also be specified in plain text)
        // "destination": {"terminal": "мск, МКАД 84-ый км"}
 
      }
 }))
 ```
 
-#### <a name="get-struct"/>Корневая структура. Передаётся напрямую в узел `params`
+#### <a name="get-struct"/>Root structure. Passed directly into the `params` node
 
-| Структура     | Тип       | Описание |
-| ---------     | ---       | -------- |
-| `destination` | object    | Объект, содержащий данные доставки |
-| - `address`   | string    | Строка адреса получения в свободной форме или уникальный ID локации |
-| - `terminal`  | string    | Строка терминала получения в свободной форме или уникальный ID терминала |
-| `dispatch`    | object    | Объект, содержащий данные отправления |
-| - `address`   | string    | Строка адреса отправления в свободной форме или уникальный ID локации |
-| - `date`      | string    | Дата отправления в формате `YYYY-MM-DD` (например, `2020-03-01` - 1 марта 2020 года). Необязательный параметр |
-| - `terminal`  | string    | Строка терминала отправления в свободной форме или уникальный ID терминала |
+| Structure              | Type   | Description                                                                                                            |
+|------------------------|--------|------------------------------------------------------------------------------------------------------------------------|
+| `destination`          | object | Object containing delivery data                                                                                        |
+| `destination.address`  | string | Free form delivery address query string or unique internal location ID. Mutually exclusive with `destination.terminal` |
+| `destination.terminal` | string | Free form delivery terminal query string or unique internal terminal ID. Mutually exclusive with `destination.address` |
+| `dispatch`             | object | Object containing shipping data                                                                                        |
+| `dispatch.address`     | string | Free form pickup address query string or unique internal location ID. Mutually exclusive with `dispatch.terminal`      |
+| `dispatch.date`        | string | Pickup/shipping date in `YYYY-MM-DD` format (for example, `2020-03-01` - 1st March of 2020). Optional parameter        |
+| `dispatch.terminal`    | string | Free form shipping terminal query string or unique internal terminal ID. Mutually exclusive with `dispatch.address`    |
 
->Вы можете использовать:
->* узел `dispatch`.`date` для получения расписания по выбранной дате;
->* не указывать параметр `dispatch`.`date` для получения актуального расписания на ближайшие 15 дней.
+>You can use the following:
+>* node `dispatch.date` to get the schedule for the selected date;
+>* do not specify the `dispatch.date` parameter to obtain the current schedule for the next 15 days.
 
 
-### <a name="get-response"/>Данные ответа
+### <a name="get-response"/>Response data
 
-* [Пример ответа "адрес-адрес"](#get-response-example-addr-addr)
-* [Пример ответа "терминал-терминал"](#get-response-example-term-term)
+* [Example of an "address-to-address" response](#get-response-example-addr-addr)
+* [Example fo a "terminal-to-terminal" response](#get-response-example-term-term)
 
-> ВНИМАНИЕ! Использовать можно все комбинации (не только приведенные в примере):
-> - адрес-адрес
-> - адрес-терминал
-> - терминал-адрес
-> - терминал-терминал
+> NOTICE! You can use all combinations (not just those given in the example):
+> - address-address
+> - address-terminal
+> - terminal-address
+> - terminal-terminal
 
-<a name="get-response-example-addr-addr"/>Пример ответа "адрес-адрес":
+<a name="get-response-example-addr-addr"/>Example of an "address-to-address" response
 
 ```javascript
 {
   "response": {
-    "2019-11-28": { // дата отправки
-      // стандартный интервал забора груза для данной локации (в часах)
-      "hourInterval": 5, // т.е. без режима "Фиксированное время"
-      "period": { // доступный период забора груза для данной локации
+    "2019-11-28": { // a pickup/shipping date
+      // standard cargo pickup interval for a given location (in hours)
+      "hourInterval": 5, // that is, without "Fixed time" mode
+      "period": { // available cargo pickup period for a given location
         "start": "07:00",
         "end": "23:30"
       },
-      // доступные даты доставки для данной даты отправки (в данном случае "2019-11-28")
+      // available delivery dates for a given shipping date (in this case "2019-11-28")
       "destination": {
-        "18:00": { // если груз был забран до "18:00"
+        "18:00": { // if the cargo was picked up before "18:00"
           "2019-12-04": {
-            "hourInterval": 8, // стандартный интервал доставки груза для данной локации (в часах)
-            "period": { // доступный период отвоза груза для данной локации
+            "hourInterval": 8, // standard cargo pickup interval for a given location (in hours)
+            "period": { // available cargo delivery period for a given location
               "start": "10:00",
               "end": "18:00"
             }
@@ -120,7 +120,7 @@ xhttp.send(JSON.stringify(
             }
           }
         },
-        "23:30": { // если груз был забран до "23:30"
+        "23:30": { // if the cargo was picked up before "23:30"
           "2019-12-06": {
             "hourInterval": 8,
             "period": {
@@ -138,37 +138,37 @@ xhttp.send(JSON.stringify(
         }
       }
     },
-    "2019-11-29": { // дата отправки
-      //... данные на след. дату в таком же формате как и выше
+    "2019-11-29": { // another pickup/shipping date
+      //... another data on this date but in the same format as above
     }
   }
 }
 ```
 
-<a name="get-response-example-term-term"/>Пример ответа "терминал-терминал":
+<a name="get-response-example-term-term"/>Example fo a "terminal-to-terminal" response
 
 ```javascript
 {
   "response": {
-    "2019-11-28": { // дата отправки
-      // доступные даты доставки для данной даты отправки (в данном случае "2019-11-28")
+    "2019-11-28": { // a pickup/shipping date
+      // available delivery dates for a given shipping date (in this case "2019-11-28")
       "destination": {
-        "18:00": { // если груз был доставлен на терминал 28.11.2019 до "18:00"
-          "2019-11-29": "14:00", // груз будет доступен 29.11.2019 после "14:00"
-          "2019-11-30": "anytime", // в любое время
-          "2019-12-01": "anytime", // в любое время
-          "2019-12-02": "anytime"  // в любое время
+        "18:00": { // if the cargo was delivered to the terminal on November 28, 2019 before “18:00”
+          "2019-11-29": "14:00", // the cargo will be available on November 29, 2019 after "14:00"
+          "2019-11-30": "anytime", // anytime (it means terminal works 24 hours)
+          "2019-12-01": "anytime", 
+          "2019-12-02": "anytime"  
         },
-        "22:00": { // если груз был доставлен на терминал 28.11.2019 до "22:00"
-          "2019-11-30": "16:00", // груз будет доступен 30.11.2019 после "16:00"
-          "2019-12-01": "anytime", // в любое время
-          "2019-12-02": "anytime", // в любое время
-          "2019-12-03": "anytime"  // в любое время
+        "22:00": { // if the cargo was delivered to the terminal on November 28, 2019 before “22:00” (but after "18:00")
+          "2019-11-30": "16:00", // the cargo will be available on November 30, 2019 after "16:00"
+          "2019-12-01": "anytime", // anytime (it means terminal works 24 hours)
+          "2019-12-02": "anytime", 
+          "2019-12-03": "anytime"  
         }
       }
     },
-    "2019-11-29": { // дата отправки
-      // ... данные на след. дату в таком же формате как и выше
+    "2019-11-29": { // another pickup/shipping date
+      //... another data on this date but in the same format as above
     }
   }
 }
