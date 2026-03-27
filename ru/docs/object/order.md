@@ -340,7 +340,7 @@ xhttp.send(JSON.stringify(
 xhttp.send(JSON.stringify(
 {
   "object": "order",
-  "action": "set",
+  "action": "get",
   "params": {
     "filters": {
       "number": "МойПользовательскийНомер"

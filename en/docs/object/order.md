@@ -351,7 +351,7 @@ List of the documents:
 xhttp.send(JSON.stringify(
 {
   "object": "order",
-  "action": "set",
+  "action": "get",
   "params": {
     "filters": {
       "number": "МойПользовательскийНомер"
