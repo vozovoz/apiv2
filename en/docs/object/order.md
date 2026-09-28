@@ -513,7 +513,7 @@ xhttp.send(JSON.stringify(
 
 #### <a name="set-example"/>Example of a structure
 
-```javascript
+```metadata json
 // full javascript code to use in web browser developer console, see in "Quick start" section
 xhttp.send(JSON.stringify(
 {
@@ -603,23 +603,30 @@ xhttp.send(JSON.stringify(
       }
     },
     "payer": "ivan", // sets the dispatch customer as payer (by temporary ID). Can be omitted if payer is a receiver customer
-    "promoCode": "promo" // promo code, if available
+    "promoCode": "promo", // promo code, if available
+    "attachEtdms": [ // documents to be attached in advance in the Electronic Transportation Documents Management System
+      {
+        "type": "digitalExpeditingCommission", // document type (digital expediting commission or electronic forwarding instruction)
+        "name": "ЭПЭ-00001234" // document name
+      }
+    ]
   }
 }));
 ```
 
 #### <a name="get-struct"/>Root structure. Passed directly into the `params` node
 
-| Structure      | Type           | Description                                                                                                                                                                                                                                                                                                                                                                                                                                      |
-|----------------|----------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Required**   |   
-| `cargo`        | object         | ["Cargo" structure](../structure/cargo.md) _(on another page)_                                                                                                                                                                                                                                                                                                                                                                                   |
-| `gateway`      | object         | ["Gateway" structure](../structure/gateway.md) _(on another page)_                                                                                                                                                                                                                                                                                                                                                                               |
-| `payer`        | string\|object | String with a temporary ID specified (or not specified) for counterparties in the "Gateway" structure. The default value is `destination`, that means receiver of the cargo is the payer (for example, if you want set receiver as the payer without temporary ID, set it to `destination`). **Can also be a third party**, then contents of this node must be an instance of [Customer structure](../structure/customer.md) _(on another page)_ |
-| **Optional**   | 
-| `cod`          | object         | [Cash-on-delivery structure](../structure/cod.md) _(on another page)_                                                                                                                                                                                                                                                                                                                                                                            |
-| `customId`     | string         | Order ID, defined by user. Ypu can use it in the filters to get this order. Optional. In any case each order has a unique public order number and a unique internal ID                                                                                                                                                                                                                                                                           |
-| `promoCode`    | string         | Promo code, if available. Optional                                                                                                                                                                                                                                                                                                                                                                                                               |
+| Structure | Type | Description |
+|---|---|---|
+| **Required** |   
+| `cargo` | object | ["Cargo" structure](../structure/cargo.md) _(on another page)_ |
+| `gateway` | object | ["Gateway" structure](../structure/gateway.md) _(on another page)_ |
+| `payer` | string\|object | String with a temporary ID specified (or not specified) for counterparties in the "Gateway" structure. The default value is `destination`, that means receiver of the cargo is the payer (for example, if you want set receiver as the payer without temporary ID, set it to `destination`). **Can also be a third party**, then contents of this node must be an instance of [Customer structure](../structure/customer.md) _(on another page)_ |
+| **Optional** | 
+| `attachEtdms` | array | [Array of documents for the Electronic Transportation Documents Management System](../structure/attachEtdms.md) _(on another page)_ |
+| `cod` | object | [Cash-on-delivery structure](../structure/cod.md) _(on another page)_ |
+| `customId` | string | Order ID, defined by user. Ypu can use it in the filters to get this order. Optional. In any case each order has a unique public order number and a unique internal ID |
+| `promoCode` | string | Promo code, if available. Optional |
 
 ### <a name="get-response"/>Response data
 
@@ -628,7 +635,7 @@ xhttp.send(JSON.stringify(
 
 <a name="set-response-example"/>Example of a response
 
-```javascript
+```metadata json
 {
   "response": {
     "id": "3afda4a6-46cf-11e7-80f9-00155d189b14", // unique internal order ID
